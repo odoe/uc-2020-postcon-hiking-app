@@ -1,25 +1,27 @@
 import React from 'react';
-import logo from './logo.svg';
+
+import Trails from './components/Trails';
+
 import './App.css';
 
+import { MapContext, SelectedContext } from './context';
+import useSelected from './hooks/useSelected'
+
+const webmapid = '8744e84b32e74bffb34b0b1edf0c3d60';
+
 function App() {
+  const value = useSelected();
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <SelectedContext.Provider value={value}>
+      <MapContext.Provider value={webmapid}>
+        <div className="App">
+          <header className="App-header">
+            Trails
+          </header>
+          <Trails />
+        </div>
+      </MapContext.Provider>
+    </SelectedContext.Provider>
   );
 }
 
