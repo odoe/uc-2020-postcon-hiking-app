@@ -21,7 +21,6 @@ export default function useTrails(id) {
   }
 
   useEffect(() => {
-    
     loadMap(id);
   }, [id]);
 

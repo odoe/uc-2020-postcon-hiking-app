@@ -3,8 +3,9 @@ import { loadModules, loadCss } from 'esri-loader';
 const app = {};
 
 export async function initWebMap() {
-  const [ WebMap ] = await loadModules([
-    'esri/WebMap'
+  const [ WebMap, ElevationLayer ] = await loadModules([
+    'esri/WebMap',
+    'esri/layers/ElevationLayer'
   ]);
 
   const webmap = new WebMap({
@@ -13,6 +14,13 @@ export async function initWebMap() {
     }
   });
 
+  const elevationLayer = new ElevationLayer({
+    url: 'https://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer/'
+  });
+
+  await elevationLayer.load();
+
+  app.elevationLayer = elevationLayer;
   app.webmap = webmap;
 
   return webmap;
@@ -30,6 +38,20 @@ export async function initView(container) {
   });
 
   app.view = view;
+
+  app.view.popup.actions.add({
+    id: 'query-elevation',
+    title: 'Elevation'
+  });
+
+  app.view.popup.on('trigger-action', ({ action }) => {
+    if (action.id === 'query-elevation') {
+      const { selectedFeature } = app.view.popup;
+      app.elevationLayer.queryElevation(selectedFeature.geometry).then((result) => {
+        console.log('elevation result', result);
+      });
+    }
+  });
 
   return view;
 }
