@@ -8,9 +8,8 @@ export default function useTrails(id) {
     const webmap = await initWebMap(id);
     await webmap.load();
 
-    const layer = webmap.layers.getItemAt(0) // could be better
+    const layer = webmap.layers.getItemAt(1) // could be better
     await layer.load()
-    
     const query = layer.createQuery()
     query.outFields = ['manager']
     query.returnGeometry = false;
