@@ -3,8 +3,9 @@ import { loadModules, loadCss } from 'esri-loader';
 const app = {};
 
 export async function initWebMap() {
-  const [ WebMap, ElevationLayer, FeatureLayer, GraphicsLayer, TileLayer, GroupLayer ] = await loadModules([
+  const [ WebMap, Bookmark, ElevationLayer, FeatureLayer, GraphicsLayer, TileLayer, GroupLayer ] = await loadModules([
     'esri/WebMap',
+    'esri/webmap/Bookmark',
     'esri/layers/ElevationLayer',
     'esri/layers/FeatureLayer',
     'esri/layers/GraphicsLayer',
@@ -12,10 +13,13 @@ export async function initWebMap() {
     'esri/layers/GroupLayer'
   ]);
 
+  const bookmarksLocal = JSON.parse(localStorage.getItem('trail-bookmarks')) || [];
+
   const webmap = new WebMap({
     portalItem: {
       id: '8744e84b32e74bffb34b0b1edf0c3d60'
-    }
+    },
+    bookmarks: bookmarksLocal.map(a => Bookmark.fromJSON(a))
   });
 
   const elevationLayer = new ElevationLayer({
@@ -50,9 +54,11 @@ export async function initWebMap() {
 
 export async function initView(container) {
   loadCss();
-  const [ MapView, BasemapToggle ] = await loadModules([
+  const [ MapView, BasemapToggle, Bookmarks, Expand ] = await loadModules([
     'esri/views/MapView',
-    'esri/widgets/BasemapToggle'
+    'esri/widgets/BasemapToggle',
+    'esri/widgets/Bookmarks',
+    'esri/widgets/Expand'
   ]);
 
   const view = new MapView({
@@ -62,13 +68,42 @@ export async function initView(container) {
 
   const toggle = new BasemapToggle({ view, nextBasemap: "hybrid" });
 
+  const bookmarks = new Bookmarks({
+    view: view,
+    editingEnabled: true,
+    bookmarkCreationOptions: {
+      takeScreenshot: true,
+      captureExtent: true,
+      screenshotSettings: {
+        width: 100,
+        height: 100
+      }
+    }
+ });
+
+ const bookmarksExpand = new Expand({
+   content: bookmarks
+ });
+
   view.ui.add(toggle, 'bottom-right');
+  view.ui.add(bookmarksExpand, 'top-right');
 
   app.view = view;
 
   app.view.popup.actions.add({
     id: 'query-elevation',
     title: 'Elevation'
+  });
+
+  app.view.when(() => {
+    bookmarks.bookmarks.on('change', ({added}) => {
+      const bookmarJson = added.map(x => x.toJSON());
+      console.log(bookmarJson);
+      let bookmarkStored = JSON.parse(localStorage.getItem('trail-bookmarks')) || [];
+      localStorage.removeItem('trail-bookmarks');
+      bookmarkStored = bookmarkStored.concat(bookmarJson);
+      localStorage.setItem('trail-bookmarks', JSON.stringify(bookmarkStored))
+    });
   });
 
   app.view.popup.on('trigger-action', ({ action }) => {
