@@ -1,7 +1,6 @@
 import { loadModules, loadCss, setDefaultOptions } from 'esri-loader';
 
 const app = {};
-let sym2 = {}; 
 const sym1 = {
   type: "cim",
   // CIM Line Symbol
@@ -60,21 +59,14 @@ const sym1 = {
 }
 
 export async function initWebMap() {
-  const [ WebMap, ElevationLayer, FeatureLayer, GraphicsLayer, TileLayer, GroupLayer, SimpleLineSymbol ] = await loadModules([
+  const [ WebMap, ElevationLayer, FeatureLayer, GraphicsLayer, TileLayer, GroupLayer ] = await loadModules([
     'esri/WebMap',
     'esri/layers/ElevationLayer',
     'esri/layers/FeatureLayer',
     'esri/layers/GraphicsLayer',
     'esri/layers/TileLayer',
-    'esri/layers/GroupLayer',
-    'esri/symbols/SimpleLineSymbol'    
+    'esri/layers/GroupLayer'
   ]);
-
-  sym2 = new SimpleLineSymbol({
-    color: "blue",
-    width: "1px",
-    style: "solid"
-  })  
 
   const webmap = new WebMap({
     portalItem: {
@@ -152,19 +144,14 @@ async function applyRenderer (exp, featureLayer) {
   const [UniqueValueRenderer] = await loadModules([
     'esri/renderers/UniqueValueRenderer'
   ]);
-  console.log("sym2 ", sym2);
+
   const renderer = new UniqueValueRenderer({
     valueExpression: exp,
     uniqueValueInfos: [{
       value: 'true',
       symbol: sym1,
       label: "cim"
-    },
-    // {
-    //   value: 'false',
-    //   symbol: sym2,
-    //   label: "notcim"
-    // }
+    }
   ]
   });
 
