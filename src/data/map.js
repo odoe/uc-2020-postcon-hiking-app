@@ -1,6 +1,62 @@
-import { loadModules, loadCss } from 'esri-loader';
+import { loadModules, loadCss, setDefaultOptions } from 'esri-loader';
 
 const app = {};
+const sym1 = {
+  type: "cim",
+  // CIM Line Symbol
+  data: {
+    type: "CIMLineSymbol",
+    symbolLayers: [{
+      // white dashed layer at center of the line
+      type: "CIMSolidStroke",
+      effects: [{
+        type: "CIMGeometricEffectDashes",
+        dashTemplate: [2, 2, 2, 2],
+        lineDashEnding: "NoConstraint",
+        controlPointEnding: "NoConstraint"
+      }],
+      enable: "true",
+      capStyle: "Butt",
+      joinStyle: "Round",
+      width: 1,
+      color: [
+        255,
+        255,
+        255,
+        255
+      ]
+    },
+    {
+      // lighter green line layer that surrounds the dashes
+      type: "CIMSolidStroke",
+      enable: "true",
+      capStyle: "Butt",
+      joinStyle: "Round",
+      width: 3,
+      color: [
+        56,
+        168,
+        0,
+        255
+      ]
+    },
+    {
+      // darker green outline around the line symbol
+      type: "CIMSolidStroke",
+      enable: true,
+      capStyle: "Butt",
+      joinStyle: "Round",
+      width: 6,
+      color: [
+        0,
+        115,
+        76,
+        255
+      ]
+    }
+    ]
+  }
+}
 
 export async function initWebMap() {
   const [ WebMap, Bookmark, ElevationLayer, FeatureLayer, GraphicsLayer, TileLayer, GroupLayer ] = await loadModules([
@@ -118,6 +174,24 @@ export async function initView(container) {
   return view;
 }
 
+async function applyRenderer (exp, featureLayer) {
+  const [UniqueValueRenderer] = await loadModules([
+    'esri/renderers/UniqueValueRenderer'
+  ]);
+
+  const renderer = new UniqueValueRenderer({
+    valueExpression: exp,
+    uniqueValueInfos: [{
+      value: 'true',
+      symbol: sym1,
+      label: "cim"
+    }
+  ]
+  });
+
+  featureLayer.renderer = renderer;
+}
+
 export async function filterMapData(name) {
   const [{ whenFalseOnce }, geometryEngine] = await loadModules(['esri/core/watchUtils', 'esri/geometry/geometryEngine']);
   const layer = app.webmap.layers.getItemAt(1) // could be better
@@ -128,7 +202,19 @@ export async function filterMapData(name) {
   const query = layer.createQuery();
   query.where = `manager = '${name}'`;
   const {features} = await layer.queryFeatures(query);
-  console.log(features);
+
+  const ids = await layer.queryObjectIds(query.clone());
+  const arcade = `
+     if(indexof([` + ids + `], $feature.FID) != -1){
+      // Apply a certain symbol
+      return true;
+    }
+    else {
+      // Or, apply a different symbol
+      return false;
+    } `
+  applyRenderer(arcade, layer);
+
   const groupLayer = app.webmap.findLayerById('group');
   const trailLayer = app.webmap.findLayerById('trail');
   console.log(trailLayer);
@@ -152,6 +238,6 @@ export async function filterMapData(name) {
     filter: {
       where: `manager = '${name}'`
     },
-    excludedEffect: 'grayscale(25%) opacity(45%)'
+    excludedEffect: 'grayscale(25%) opacity(35%)'
   };
 }
