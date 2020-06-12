@@ -1,15 +1,15 @@
 import { useEffect } from 'react';
 
-export default function useFilter(name) {
+export default function useFilter(names) {
   useEffect(() => {
     const filter = async () => {
-      if (name) {
+      if (names) {
         const { filterMapData } = await import('../data/map');
-        filterMapData(name);
+        filterMapData(names);
       }
     }
     filter();
-  }, [name]);
+  }, [names]);
 
-  return name;
+  return names;
 }
