@@ -53,8 +53,6 @@ const Trails = () => {
     return `${value} Meters`;
   }
 
-  console.log(value)
-
   if (name) {
     return (
       <div style={{ width: "100%", height: "100%" }} ref={elementRef}></div>

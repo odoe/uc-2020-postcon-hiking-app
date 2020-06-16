@@ -102,6 +102,22 @@ export async function initWebMap() {
   app.elevationLayer = elevationLayer;
   app.webmap = webmap;
 
+  await webmap.load();
+  webmap.layers.forEach((layer) => {
+    console.log(layer.title, layer.id);
+  });
+  // trailheads layer
+  const layer = webmap.findLayerById("17275f72a2b-layer-0");
+  await layer.load();
+  console.log("popup template", layer.popupTemplate);
+  layer.popupTemplate.actions = layer.popupTemplate.actions || [];
+  layer.popupTemplate.actions.push({
+    id: "fetch-directions",
+    title: "Directions",
+    className: "esri-icon-directions"
+  });
+  layer.visible = true;
+
   return webmap;
 }
 
@@ -149,6 +165,7 @@ export async function initView(container) {
   });
 
   app.view.when(() => {
+    // set up bookmarks
     bookmarks.bookmarks.on("change", ({ added }) => {
       const bookmarJson = added.map((x) => x.toJSON());
       let bookmarkStored =
