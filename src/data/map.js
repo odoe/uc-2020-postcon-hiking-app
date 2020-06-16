@@ -5,44 +5,47 @@ const sym1 = {
   type: "cim",
   // CIM Line Symbol
   data: {
-    type: "CIMLineSymbol",
-    symbolLayers: [
-      {
-        // white dashed layer at center of the line
-        type: "CIMSolidStroke",
-        effects: [
-          {
-            type: "CIMGeometricEffectDashes",
-            dashTemplate: [2, 2, 2, 2],
-            lineDashEnding: "NoConstraint",
-            controlPointEnding: "NoConstraint",
-          },
-        ],
-        enable: "true",
-        capStyle: "Butt",
-        joinStyle: "Round",
-        width: 1,
-        color: [255, 255, 255, 255],
-      },
-      {
-        // lighter green line layer that surrounds the dashes
-        type: "CIMSolidStroke",
-        enable: "true",
-        capStyle: "Butt",
-        joinStyle: "Round",
-        width: 3,
-        color: [56, 168, 0, 255],
-      },
-      {
-        // darker green outline around the line symbol
-        type: "CIMSolidStroke",
-        enable: "true",
-        capStyle: "Butt",
-        joinStyle: "Round",
-        width: 6,
-        color: [0, 115, 76, 255],
-      },
-    ],
+    type: "CIMSymbolReference",
+    symbol: {
+      type: "CIMLineSymbol",
+      symbolLayers: [
+        {
+          // white dashed layer at center of the line
+          type: "CIMSolidStroke",
+          effects: [
+            {
+              type: "CIMGeometricEffectDashes",
+              dashTemplate: [2, 2, 2, 2], // width of dashes and spacing between the dashes
+              lineDashEnding: "NoConstraint",
+              controlPointEnding: "NoConstraint",
+            },
+          ],
+          enable: "true", // must be set to true in order for the symbol layer to be visible
+          capStyle: "Butt",
+          joinStyle: "Round",
+          width: 1,
+          color: [255, 255, 255, 255],
+        },
+        {
+          // lighter green line layer that surrounds the dashes
+          type: "CIMSolidStroke",
+          enable: "true",
+          capStyle: "Butt",
+          joinStyle: "Round",
+          width: 3,
+          color: [56, 168, 0, 255],
+        },
+        {
+          // darker green outline around the line symbol
+          type: "CIMSolidStroke",
+          enable: true,
+          capStyle: "Butt",
+          joinStyle: "Round",
+          width: 6,
+          color: [0, 115, 76, 255],
+        },
+      ],
+    },
   },
 };
 
@@ -114,7 +117,7 @@ export async function initWebMap() {
   layer.popupTemplate.actions.push({
     id: "fetch-directions",
     title: "Directions",
-    className: "esri-icon-directions"
+    className: "esri-icon-directions",
   });
   layer.visible = true;
 
