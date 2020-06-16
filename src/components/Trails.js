@@ -5,6 +5,9 @@ import {
   Container,
   FormControlLabel,
   Grid,
+  List,
+  ListItem,
+  ListItemText,
   Slider,
   Typography,
 } from "@material-ui/core";
@@ -14,7 +17,7 @@ import useTrails from "../hooks/useTrails";
 import useView from "../hooks/useView";
 import useSelected from "../hooks/useSelected";
 import useFilter from "../hooks/useFilter";
-import { fetchTrails, filterMapData } from "../data/map";
+import { fetchTrails } from "../data/map";
 
 const Trails = () => {
   const setView = useView();
@@ -22,6 +25,7 @@ const Trails = () => {
   const maxElevation = useTrails(webmapid) || [];
   const { value, setCurrentValue } = useSelected();
   const elementRef = useRef(null);
+  const [name, setName] = useState(null);
 
   const [dogs, setDogs] = useState(false);
   const [bike, setBike] = useState(false);
@@ -34,23 +38,24 @@ const Trails = () => {
   };
 
   const doSearch = async () => {
-    console.log(elevValue);
     const { features } = await fetchTrails(elevValue, { dogs, bike, horse });
     const names = features.map(a => a.attributes.name);
-    setCurrentValue(names);
+    setCurrentValue(features);
   };
 
-  useFilter(value);
+  useFilter([name]);
 
   useEffect(() => {
     setView(elementRef.current);
-  }, [setView, value]);
+  }, [setView, name]);
 
   function valueText(value) {
     return `${value} Meters`;
   }
 
-  if (value) {
+  console.log(value)
+
+  if (name) {
     return (
       <div style={{ width: "100%", height: "100%" }} ref={elementRef}></div>
     );
@@ -91,7 +96,6 @@ const Trails = () => {
                 <Checkbox
                   checked={dogs}
                   onChange={() => {
-                    console.log("dogs setState()");
                     setDogs(!dogs);
                   }}
                   name="dogs"
@@ -104,7 +108,6 @@ const Trails = () => {
                 <Checkbox
                   checked={bike}
                   onChange={() => {
-                    console.log("bike setState()");
                     setBike(!bike);
                   }}
                   name="bike"
@@ -117,7 +120,6 @@ const Trails = () => {
                 <Checkbox
                   checked={horse}
                   onChange={() => {
-                    console.log("horse setState()");
                     setHorse(!horse);
                   }}
                   name="horse"
@@ -130,6 +132,17 @@ const Trails = () => {
           <p>
             <Button onClick={doSearch}>Search</Button>
           </p>
+        </Container>
+        <Container fixed> 
+        <List>
+              {(value || []).filter(({attributes}) => (
+                attributes.name.length > 2
+              )).map(({ attributes: { FID, name, name_1 } }, idx) => (
+                <ListItem button key={`list-item-${name}-${idx}`} onClick={() => setName(FID)}>
+                  <ListItemText>{name} - {name_1}</ListItemText>
+                </ListItem>
+              ))}
+        </List>
         </Container>
       </main>
     );

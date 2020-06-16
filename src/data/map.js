@@ -36,7 +36,7 @@ const sym1 = {
       {
         // darker green outline around the line symbol
         type: "CIMSolidStroke",
-        enable: true,
+        enable: "true",
         capStyle: "Butt",
         joinStyle: "Round",
         width: 6,
@@ -151,7 +151,6 @@ export async function initView(container) {
   app.view.when(() => {
     bookmarks.bookmarks.on("change", ({ added }) => {
       const bookmarJson = added.map((x) => x.toJSON());
-      console.log(bookmarJson);
       let bookmarkStored =
         JSON.parse(localStorage.getItem("trail-bookmarks")) || [];
       localStorage.removeItem("trail-bookmarks");
@@ -174,23 +173,19 @@ export async function initView(container) {
   return view;
 }
 
-async function applyRenderer(exp, featureLayer) {
-  const [UniqueValueRenderer] = await loadModules([
-    "esri/renderers/UniqueValueRenderer",
-  ]);
-
-  const renderer = new UniqueValueRenderer({
+function applyRenderer(exp) {
+  const renderer = {
+    type: "unique-value",
     valueExpression: exp,
     uniqueValueInfos: [
       {
-        value: "true",
+        value: true,
         symbol: sym1,
         label: "cim",
       },
     ],
-  });
-
-  featureLayer.renderer = renderer;
+  };
+  return renderer;
 }
 
 export async function fetchMaxElevation() {
@@ -209,40 +204,57 @@ export async function fetchMaxElevation() {
   query.where = "1=1";
   query.outStatistics = [maxStat];
   const results = await layer.queryFeatures(query);
-  console.log(results);
   const elev = results.features[0].attributes["Max_Elevation"];
-  console.log("elevation", elev);
   return elev;
 }
 
 export async function fetchTrails(elevation, { dogs, bike, horse }) {
   const [min, max] = elevation;
+  if (!app.webmap) return;
   await app.webmap.load();
   const layer = app.webmap.layers.getItemAt(1); // could be better
-
+  layer.outFields = ["name", "name_1"];
   await layer.load();
   const query = layer.createQuery();
-  query.where = `(min_elevat > ${min} AND max_elevat < ${max}) AND ${dogs ? "(dogs <> 'no' AND dogs <> ' ')" : "(dogs = 'no' OR dogs = ' ')"} AND ${bike ? "(bike <> 'no'  AND bike <> ' ')" : "(bike = 'no' OR bike = ' ')"} AND ${dogs ? "(horse <> 'no'  AND horse <> ' ')" : "(horse = 'no' OR horse = ' ')"}`;
+  query.returnDistinct = true;
+  query.outFields = ["*"];
+  query.where = `(min_elevat > ${min} AND max_elevat < ${max}) AND ${
+    dogs ? "(dogs <> 'no' AND dogs <> ' ')" : "(dogs = 'no' OR dogs = ' ')"
+  } AND ${
+    bike ? "(bike <> 'no'  AND bike <> ' ')" : "(bike = 'no' OR bike = ' ')"
+  } AND ${
+    dogs ? "(horse <> 'no'  AND horse <> ' ')" : "(horse = 'no' OR horse = ' ')"
+  }`;
   const { features } = await layer.queryFeatures(query);
-  console.log('elevation results', features);
   return { features };
   // const ids = await layer.queryObjectIds(query.clone());
 }
 
 export async function filterMapData(names) {
+  if (!app.webmap) return;
   const [{ whenFalseOnce }, geometryEngine] = await loadModules([
     "esri/core/watchUtils",
     "esri/geometry/geometryEngine",
   ]);
+
+  const where = `FID in (${names.join(",")})`;
+
   await app.webmap.load();
   const layer = app.webmap.layers.getItemAt(1); // could be better
-
+  layer.outFields = ["*"];
   await layer.load();
-  const layerView = await app.view.whenLayerView(layer);
+  await app.view.when();
+  const layerView = await app.view
+    .whenLayerView(layer)
+    .catch((err) => console.log(err.message));
+  if (!layerView) return;
+
   await whenFalseOnce(layerView, "updating");
   const query = layer.createQuery();
-  query.where = `name in ('${names.join("','")}')`;
+  query.where = where;
   const { features } = await layer.queryFeatures(query);
+
+  console.log(features);
 
   const ids = await layer.queryObjectIds(query.clone());
   const arcade =
@@ -250,23 +262,24 @@ export async function filterMapData(names) {
      if(indexof([` +
     ids +
     `], $feature.FID) != -1){
-      // Apply a certain symbol
       return true;
     }
     else {
-      // Or, apply a different symbol
       return false;
-    } `;
-  applyRenderer(arcade, layer);
+    } 
+  `;
+
+  console.log("applyRenderer", layer);
+  const renderer = applyRenderer(arcade);
+  layer.renderer = renderer;
 
   const groupLayer = app.webmap.findLayerById("group");
   const trailLayer = app.webmap.findLayerById("trail");
-  console.log(trailLayer);
 
   const geometry = geometryEngine.union(
     geometryEngine.buffer(
       features.map((x) => x.geometry),
-      2,
+      1,
       "miles"
     )
   );
@@ -285,7 +298,7 @@ export async function filterMapData(names) {
   await app.view.goTo(geometry);
   layerView.effect = {
     filter: {
-      where: `name in ('${names.join("','")}')`,
+      where,
     },
     excludedEffect: "grayscale(25%) opacity(35%)",
   };
