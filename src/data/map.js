@@ -194,11 +194,33 @@ export async function initView(container) {
         .queryElevation(selectedFeature.geometry)
         .then((result) => {
           console.log("elevation result", result);
+          console.log(calculateAltitudeGainLoss(result.geometry.paths));
         });
     }
   });
 
   return view;
+}
+
+const calculateAltitudeGainLoss = (paths) => {
+  let gain = 0;
+  let loss = 0;
+  console.log("paths ", paths);
+  for(let i = 0; i < paths[0].length - 1; i++){
+    console.log("p ", paths[0][i][2]);
+    const diff = paths[0][i][2] - paths[0][i+1][2];
+    console.log('diff ', diff);
+    if(Math.sign(diff) == 1){
+      gain += diff;
+    }
+    else {
+      loss += diff;
+    }
+  }
+  return {
+    gain: gain,
+    loss: loss
+  }
 }
 
 const applyTrailRenderer = (exp) => {
@@ -281,7 +303,7 @@ export async function filterMapData(names) {
   query.where = where;
   const { features } = await layer.queryFeatures(query);
 
-  console.log(features);
+  console.log('features ', features);
 
   const ids = await layer.queryObjectIds(query.clone());
   const arcade =
@@ -302,7 +324,7 @@ export async function filterMapData(names) {
 
   const groupLayer = app.webmap.findLayerById("group");
   const trailLayer = app.webmap.findLayerById("trail");
-  const trailHeadsLayer = app.webmap.layers.getItemAt(3); // figure ouut Id?
+  const trailHeadsLayer = app.webmap.layers.getItemAt(3); // figure out Id?
   trailHeadsLayer.renderer = trailheadRenderer;
 
   const geometry = geometryEngine.union(
