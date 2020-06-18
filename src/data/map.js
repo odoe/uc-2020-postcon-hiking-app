@@ -1,7 +1,15 @@
 import { loadModules, loadCss } from "esri-loader";
 
 const app = {};
-const sym1 = {
+const trailheadRenderer = {
+  type: "simple",
+  symbol: {
+    type: "web-style",
+    name: "trail",
+    styleName: "Esri2DPointSymbolsStyle"
+  }
+}
+const trailSym = {
   type: "cim",
   // CIM Line Symbol
   data: {
@@ -193,14 +201,14 @@ export async function initView(container) {
   return view;
 }
 
-function applyRenderer(exp) {
+const applyTrailRenderer = (exp) => {
   const renderer = {
     type: "unique-value",
     valueExpression: exp,
     uniqueValueInfos: [
       {
         value: true,
-        symbol: sym1,
+        symbol: trailSym,
         label: "cim",
       },
     ],
@@ -247,7 +255,6 @@ export async function fetchTrails(elevation, { dogs, bike, horse }) {
   }`;
   const { features } = await layer.queryFeatures(query);
   return { features };
-  // const ids = await layer.queryObjectIds(query.clone());
 }
 
 export async function filterMapData(names) {
@@ -290,11 +297,13 @@ export async function filterMapData(names) {
   `;
 
   console.log("applyRenderer", layer);
-  const renderer = applyRenderer(arcade);
+  const renderer = applyTrailRenderer(arcade);
   layer.renderer = renderer;
 
   const groupLayer = app.webmap.findLayerById("group");
   const trailLayer = app.webmap.findLayerById("trail");
+  const trailHeadsLayer = app.webmap.layers.getItemAt(3); // figure ouut Id?
+  trailHeadsLayer.renderer = trailheadRenderer;
 
   const geometry = geometryEngine.union(
     geometryEngine.buffer(
