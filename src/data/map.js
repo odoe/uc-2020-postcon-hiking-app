@@ -1,7 +1,15 @@
 import { loadModules, loadCss } from "esri-loader";
 
 const app = {};
-const sym1 = {
+const trailheadRenderer = {
+  type: "simple",
+  symbol: {
+    type: "web-style",
+    name: "trail",
+    styleName: "Esri2DPointSymbolsStyle"
+  }
+}
+const trailSym = {
   type: "cim",
   // CIM Line Symbol
   data: {
@@ -265,6 +273,7 @@ export async function initView(container, searchContainer) {
         .queryElevation(selectedFeature.geometry)
         .then((result) => {
           console.log("elevation result", result);
+          console.log(calculateAltitudeGainLoss(result.geometry.paths));
         });
     }
     if (action.id === "fetch-directions") {
@@ -291,14 +300,35 @@ export async function initView(container, searchContainer) {
   return view;
 }
 
-function applyRenderer(exp) {
+const calculateAltitudeGainLoss = (paths) => {
+  let gain = 0;
+  let loss = 0;
+  console.log("paths ", paths);
+  for(let i = 0; i < paths[0].length - 1; i++){
+    console.log("p ", paths[0][i][2]);
+    const diff = paths[0][i][2] - paths[0][i+1][2];
+    console.log('diff ', diff);
+    if(Math.sign(diff) == 1){
+      gain += diff;
+    }
+    else {
+      loss += diff;
+    }
+  }
+  return {
+    gain: gain,
+    loss: loss
+  }
+}
+
+const applyTrailRenderer = (exp) => {
   const renderer = {
     type: "unique-value",
     valueExpression: exp,
     uniqueValueInfos: [
       {
         value: true,
-        symbol: sym1,
+        symbol: trailSym,
         label: "cim",
       },
     ],
@@ -345,7 +375,6 @@ export async function fetchTrails(elevation, { dogs, bike, horse }) {
   }`;
   const { features } = await layer.queryFeatures(query);
   return { features };
-  // const ids = await layer.queryObjectIds(query.clone());
 }
 
 export async function filterMapData(names) {
@@ -385,11 +414,13 @@ export async function filterMapData(names) {
     } 
   `;
 
-  const renderer = applyRenderer(arcade);
+  const renderer = applyTrailRenderer(arcade);
   layer.renderer = renderer;
 
   const groupLayer = app.webmap.findLayerById("group");
   const trailLayer = app.webmap.findLayerById("trail");
+  const trailHeadsLayer = app.webmap.layers.getItemAt(3); // figure out Id?
+  trailHeadsLayer.renderer = trailheadRenderer;
 
   const geometry = geometryEngine.union(
     geometryEngine.buffer(
@@ -400,7 +431,7 @@ export async function filterMapData(names) {
   );
 
   trailLayer.removeAll();
-  
+
   trailLayer.add({
     attributes: {},
     geometry,
