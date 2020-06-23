@@ -68,6 +68,12 @@ export async function initWebMap() {
     "esri/layers/GroupLayer",
   ]);
 
+  const notesLayer = new FeatureLayer({
+    portalItem: {
+      id: "1327d21d42934da3b7df7454d001c2bb"
+    }
+  });
+
   const bookmarksLocal =
     JSON.parse(localStorage.getItem("trail-bookmarks")) || [];
 
@@ -84,6 +90,7 @@ export async function initWebMap() {
   });
 
   await elevationLayer.load();
+  await notesLayer.load();
 
   const trailLayer = new GraphicsLayer({ id: "trail" });
 
@@ -103,16 +110,43 @@ export async function initWebMap() {
   webmap.add(groupLayer);
 
   app.elevationLayer = elevationLayer;
+  app.notesLayer = notesLayer;
   app.webmap = webmap;
 
   await webmap.load();
-  webmap.layers.forEach((layer) => {
-    console.log(layer.title, layer.id);
-  });
+
+  // hiking trails
+  const hikingLayer = app.webmap.layers.getItemAt(1); // could be better
+  await hikingLayer.load();
+  // const hikingLayer = app.webmap.findLayerById('17275f72a4f-layer-2'); // could be better
+  hikingLayer.popupTemplate.content = async({ graphic }) => {
+    const trailId = graphic.attributes.FID;
+    const query = hikingLayer.createQuery();
+    query.where `TrailId = ${trailId}`;
+    const { features }  = await hikingLayer.queryFeatures(query).catch((err) => console.warn(err.message));
+    let notes = `<p>No notes available</p>`;
+    const content = `<strong>{name}</strong> is a trail with <strong>{surface}</strong> surface. It is managed by <strong>{manager}</strong>.`;
+    if (features && features.length) {
+      const list = features.map(feature => (
+        `<li>${feature.attributes.Note}</li>`
+      ));
+      return `
+        ${content}
+        <hr />
+        ${list}
+      `
+    }
+    else {
+      return `
+        ${content}
+        <hr />
+        ${notes}
+      `
+    }
+  }
   // trailheads layer
   const layer = webmap.findLayerById("17275f72a2b-layer-0");
   await layer.load();
-  console.log("popup template", layer.popupTemplate);
   layer.popupTemplate.actions = layer.popupTemplate.actions || [];
   layer.popupTemplate.actions.push({
     id: "fetch-directions",
@@ -124,13 +158,39 @@ export async function initWebMap() {
   return webmap;
 }
 
-export async function initView(container) {
+export async function addSearch(container, view) {
   loadCss();
-  const [MapView, BasemapToggle, Bookmarks, Expand] = await loadModules([
+  const [Search, Locator] = await loadModules([
+    "esri/widgets/Search",
+    "esri/tasks/Locator"
+  ]);
+
+  return new Search({
+    view,
+    source: [
+      {
+        locator: new Locator({ url: "https://utility.arcgis.com/usrsvcs/servers/b34c620191be4b6f9c25576a9758bfdb/rest/services/World/GeocodeServer" }),
+        singleLineFieldName: "SingleLine",
+        name: "Colorado Search",
+        placeholder: "Search Colorado",
+        maxResults: 3,
+        maxSuggestions: 6,
+        minSuggestCharacters: 0
+      }
+    ],
+    container
+  });
+}
+
+export async function initView(container, searchContainer) {
+  loadCss();
+  const [Graphic, MapView, BasemapToggle, Bookmarks, Directions, Expand] = await loadModules([
+    "esri/Graphic",
     "esri/views/MapView",
     "esri/widgets/BasemapToggle",
     "esri/widgets/Bookmarks",
-    "esri/widgets/Expand",
+    "esri/widgets/Directions",
+    "esri/widgets/Expand"
   ]);
 
   const view = new MapView({
@@ -177,6 +237,25 @@ export async function initView(container) {
       bookmarkStored = bookmarkStored.concat(bookmarJson);
       localStorage.setItem("trail-bookmarks", JSON.stringify(bookmarkStored));
     });
+
+    addSearch(searchContainer, view);
+
+    const directions = new Directions({
+      routeServiceUrl: "https://utility.arcgis.com/usrsvcs/servers/b34c620191be4b6f9c25576a9758bfdb/rest/services/World/GeocodeServer",
+      view: view
+    });
+
+    const directionsExpand = new Expand({
+      content: directions
+    });
+
+    view.ui.move("zoom", "top-right");
+
+    view.ui.add(directionsExpand, "top-right");
+
+    app.directions = directions;
+
+    directions.viewModel.stops.on("change", (changes) => console.log(changes));
   });
 
   app.view.popup.on("trigger-action", ({ action }) => {
@@ -187,6 +266,25 @@ export async function initView(container) {
         .then((result) => {
           console.log("elevation result", result);
         });
+    }
+    if (action.id === "fetch-directions") {
+      app.directions.viewModel.stops.addMany([
+        new Graphic({
+          attributes: {},
+          geometry: {
+            type: "point",
+            longitude: -104.9903,
+            latitude: 39.7392
+          }
+        }),
+        new Graphic({
+          attributes: {},
+          geometry: app.view.popup.selectedFeature.geometry.clone()
+        })
+      ]);
+      app.directions.viewModel.load().then(() => {
+        app.directions.getDirections();
+      })
     }
   });
 
@@ -274,8 +372,6 @@ export async function filterMapData(names) {
   query.where = where;
   const { features } = await layer.queryFeatures(query);
 
-  console.log(features);
-
   const ids = await layer.queryObjectIds(query.clone());
   const arcade =
     `
@@ -289,7 +385,6 @@ export async function filterMapData(names) {
     } 
   `;
 
-  console.log("applyRenderer", layer);
   const renderer = applyRenderer(arcade);
   layer.renderer = renderer;
 
@@ -303,6 +398,9 @@ export async function filterMapData(names) {
       "miles"
     )
   );
+
+  trailLayer.removeAll();
+  
   trailLayer.add({
     attributes: {},
     geometry,

@@ -19,12 +19,15 @@ import useSelected from "../hooks/useSelected";
 import useFilter from "../hooks/useFilter";
 import { fetchTrails } from "../data/map";
 
+import TrailCard from "./TrailCard";
+
 const Trails = () => {
-  const setView = useView();
+  const {setContainer, setSearchContainer} = useView();
   const webmapid = useContext(MapContext);
   const maxElevation = useTrails(webmapid) || [];
   const { value, setCurrentValue } = useSelected();
   const elementRef = useRef(null);
+  const searchRef = useRef(null);
   const [name, setName] = useState(null);
 
   const [dogs, setDogs] = useState(false);
@@ -39,15 +42,15 @@ const Trails = () => {
 
   const doSearch = async () => {
     const { features } = await fetchTrails(elevValue, { dogs, bike, horse });
-    const names = features.map(a => a.attributes.name);
     setCurrentValue(features);
   };
 
   useFilter([name]);
 
   useEffect(() => {
-    setView(elementRef.current);
-  }, [setView, name]);
+    setContainer(elementRef.current);
+    setSearchContainer(searchRef.current);
+  }, [setContainer, setSearchContainer, name]);
 
   function valueText(value) {
     return `${value} Meters`;
@@ -55,7 +58,22 @@ const Trails = () => {
 
   if (name) {
     return (
-      <div style={{ width: "100%", height: "100%" }} ref={elementRef}></div>
+      <section className="app-container">
+        <div className="toolbar">
+        <div ref={searchRef}></div>
+        </div>
+        <div className="map-container">
+          <div className="sidebar">
+            <h3>Trails</h3>
+            {(value || []).filter(({attributes}) => (
+              attributes.name.length > 2
+            )).map(({ attributes }, idx) => (
+              <TrailCard {...attributes} key={`trail-${attributes.name}-${idx}`} />
+            ))}
+          </div>
+          <div style={{ width: "100%", height: "100%" }} ref={elementRef}></div>
+        </div>
+      </section>
     );
   } else {
     return (
@@ -128,16 +146,16 @@ const Trails = () => {
           </p>
 
           <p>
-            <Button onClick={doSearch}>Search</Button>
+            <Button variant="outlined" color="primary" onClick={doSearch}>Search</Button>
           </p>
         </Container>
         <Container fixed> 
         <List>
               {(value || []).filter(({attributes}) => (
                 attributes.name.length > 2
-              )).map(({ attributes: { FID, name, name_1 } }, idx) => (
+              )).map(({ attributes: { FID, name, type } }, idx) => (
                 <ListItem button key={`list-item-${name}-${idx}`} onClick={() => setName(FID)}>
-                  <ListItemText>{name} - {name_1}</ListItemText>
+                  <ListItemText>{name} - {type}</ListItemText>
                 </ListItem>
               ))}
         </List>
