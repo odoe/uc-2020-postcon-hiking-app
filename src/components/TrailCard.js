@@ -9,6 +9,8 @@ import {
   Typography,
 } from "@material-ui/core";
 
+import { Biking, Dog, Hiking, Horse, Road, Vehicle } from "./../icons/icons";
+
 const percentSlope = (r, d) => (r > 0 && d > 0) ? (r/d) * 100 : 0.00;
 
 const trailDifficulty = (slope) => {
@@ -47,27 +49,45 @@ export default function TrailCard (props) {
   const slope = percentSlope((props.max_elevat - props.min_elevat), (props.length_mi_ * 1609.34));
   const difficulty = trailDifficulty(slope);
 
+  const icons = [];
+  if (props.bike !== "no" && props.bike !== " ") {
+    icons.push(<Biking key={`bike-${props.FID}`}/>);
+  }
+  if (props.dogs !== "no" && props.dogs !== " ") {
+    icons.push(<Dog key={`dog-${props.FID}`}/>);
+  }
+  if (props.horse !== "no" && props.horse !== " ") {
+    icons.push(<Horse key={`horse-${props.FID}`}/>);
+  }
+  if (props.atv !== "no" && props.atv !== " ") {
+    icons.push(<Vehicle key={`atv-${props.FID}`}/>);
+  }
+
   return (
     <Card className={classes.root}>
       <CardMedia
         className={classes.cover}
-        image="https://calabashtown.com/wp-content/uploads/2018/10/Haunted-Trail.jpg"
-        title="Trail Name?"
+        image="https://upload.wikimedia.org/wikipedia/commons/4/44/Natchez_Trace_Trail.jpg"
+        title={props.name}
+        loading="lazy"
+        alt={props.name}
       />
       <div className={classes.details}>
         <CardContent className={classes.content}>
           <Typography>
             {props.name}
           </Typography>
+          {
+            props.type === "Road" ? <Road key={`road-${props.FID}`}/> : <Hiking key={`hiking-${props.FID}`}/>
+          }
           <Typography variant="subtitle2" color="textSecondary">
             {props.manager}
             <Typography variant="caption" display="block" gutterBottom>
              {props.length_mi_} miles at {slope.toFixed(1)} % slope
             </Typography>
             <Typography variant="caption" display="block" gutterBottom>
-              {trailDifficulty(slope)}
+              {difficulty}
               <Button size="small" variant="contained" color="primary" style={{ float: "right" }} onClick={async () => {
-                console.log("zoom map");
                 const { filterMapData } = await import("../data/map");
                 filterMapData([props.FID]);
               }}>
@@ -75,6 +95,7 @@ export default function TrailCard (props) {
               </Button>
             </Typography>
           </Typography>
+          {[icons]}
         </CardContent>
       </div>
     </Card>

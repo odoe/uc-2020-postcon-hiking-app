@@ -13,3 +13,9 @@ Trail Grades: https://www.venturacountytrails.org/TrailMaps/TrailSymbols.htm
 * 10% or less - Moderate
 * 15% or less - Difficult
 * 20% or less - Hard
+
+hiking
+horse
+bike
+atv
+dogs
