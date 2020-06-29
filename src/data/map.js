@@ -82,6 +82,7 @@ export async function initWebMap() {
     }
   });
 
+  // Parse locally saved bookmarks
   const bookmarksLocal =
     JSON.parse(localStorage.getItem("trail-bookmarks")) || [];
 
@@ -126,7 +127,7 @@ export async function initWebMap() {
   // hiking trails
   const hikingLayer = app.webmap.layers.getItemAt(1); // could be better
   await hikingLayer.load();
-  // const hikingLayer = app.webmap.findLayerById('17275f72a4f-layer-2'); // could be better
+
   hikingLayer.popupTemplate.content = async({ graphic }) => {
     const trailId = graphic.attributes.FID;
     const query = hikingLayer.createQuery();
@@ -152,9 +153,10 @@ export async function initWebMap() {
       `
     }
   }
-  // trailheads layer
+  // TrailHeads layer
   const layer = webmap.findLayerById("17275f72a2b-layer-0");
   await layer.load();
+  
   layer.popupTemplate.actions = layer.popupTemplate.actions || [];
   layer.popupTemplate.actions.push({
     id: "fetch-directions",
@@ -239,11 +241,12 @@ export async function initView(container, searchContainer) {
   app.view.when(() => {
     // set up bookmarks
     bookmarks.bookmarks.on("change", ({ added }) => {
-      const bookmarJson = added.map((x) => x.toJSON());
+      // Save bookmarks to local storage
+      const bookmarksJson = added.map((x) => x.toJSON());
       let bookmarkStored =
         JSON.parse(localStorage.getItem("trail-bookmarks")) || [];
       localStorage.removeItem("trail-bookmarks");
-      bookmarkStored = bookmarkStored.concat(bookmarJson);
+      bookmarkStored = bookmarkStored.concat(bookmarksJson);
       localStorage.setItem("trail-bookmarks", JSON.stringify(bookmarkStored));
     });
 
@@ -306,9 +309,7 @@ const calculateAltitudeGainLoss = (paths) => {
   let loss = 0;
   console.log("paths ", paths);
   for(let i = 0; i < paths[0].length - 1; i++){
-    console.log("p ", paths[0][i][2]);
     const diff = paths[0][i][2] - paths[0][i+1][2];
-    console.log('diff ', diff);
     if(Math.sign(diff) == 1){
       gain += diff;
     }
@@ -372,7 +373,7 @@ export async function fetchTrails(elevation, { dogs, bike, horse }) {
   } AND ${
     bike ? "(bike <> 'no'  AND bike <> ' ')" : "(bike = 'no' OR bike = ' ')"
   } AND ${
-    dogs ? "(horse <> 'no'  AND horse <> ' ')" : "(horse = 'no' OR horse = ' ')"
+    horse ? "(horse <> 'no'  AND horse <> ' ')" : "(horse = 'no' OR horse = ' ')"
   }`;
   const { features } = await layer.queryFeatures(query);
   return { features };
