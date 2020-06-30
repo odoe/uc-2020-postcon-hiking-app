@@ -1,6 +1,9 @@
 import { loadModules, loadCss } from "esri-loader";
 
+// Object to handle module level variables
 const app = {};
+
+// Symbol Markers for Trail Heads
 const trailheadRenderer = {
   type: "simple",
   symbol: {
@@ -9,6 +12,8 @@ const trailheadRenderer = {
     styleName: "Esri2DPointSymbolsStyle"
   }
 }
+
+// CIM Line Symbol for selected trails
 const trailSym = {
   type: "cim",
   // CIM Line Symbol
@@ -57,6 +62,10 @@ const trailSym = {
   },
 };
 
+/**
+ * Initialize the WebMap used in the application
+ * @returns Promise<`esri/WebMap`>
+ */
 export async function initWebMap() {
   const [
     WebMap,
@@ -168,6 +177,12 @@ export async function initWebMap() {
   return webmap;
 }
 
+/**
+ * Creates and Search widget
+ * @param {HTMLElement} container 
+ * @param {MapView} view 
+ * @returns Promise<`esri/widgets/Search`>
+ */
 export async function addSearch(container, view) {
   loadCss();
   const [Search, Locator] = await loadModules([
@@ -193,6 +208,12 @@ export async function addSearch(container, view) {
   });
 }
 
+/**
+ * Initialize the MapView for the application
+ * @param {HTMLElement} container 
+ * @param {HTMLElement} searchContainer
+ * @returns Promise<void>
+ */
 export async function initView(container, searchContainer) {
   loadCss();
   const [Graphic, MapView, BasemapToggle, Bookmarks, Directions, Expand] = await loadModules([
@@ -304,6 +325,11 @@ export async function initView(container, searchContainer) {
   return view;
 }
 
+/**
+ * Calculate the Altitude Gain and Loss
+ * @param {Number[]} paths
+ * @returns { gain: Number, loss: Number }
+ */
 const calculateAltitudeGainLoss = (paths) => {
   let gain = 0;
   let loss = 0;
@@ -323,6 +349,11 @@ const calculateAltitudeGainLoss = (paths) => {
   }
 }
 
+/**
+ * Creates a renderer using a given Arcade Expression
+ * @param {String} exp
+ * @returns `esri/renderer/UniqueValueRenderer`
+ */
 const applyTrailRenderer = (exp) => {
   const renderer = {
     type: "unique-value",
@@ -338,6 +369,10 @@ const applyTrailRenderer = (exp) => {
   return renderer;
 }
 
+/**
+ * Finds the maximum elevation for a layer
+ * @returns Promise<Number>
+ */
 export async function fetchMaxElevation() {
   if (!app.webmap) {
     return;
@@ -358,6 +393,12 @@ export async function fetchMaxElevation() {
   return elev;
 }
 
+/**
+ * 
+ * @param {{ min: Number, max: Number }}} elevation 
+ * @param {{ dog: String, bike: String, hore: String }} attributes
+ * @returns Promise<{ features: `esri/Graphic` }>
+ */
 export async function fetchTrails(elevation, { dogs, bike, horse }) {
   const [min, max] = elevation;
   if (!app.webmap) return;
@@ -379,14 +420,19 @@ export async function fetchTrails(elevation, { dogs, bike, horse }) {
   return { features };
 }
 
-export async function filterMapData(names) {
+/**
+ * Filters map based on Feature Ids
+ * @param {String[]} ids 
+ * @returns Promise<void>
+ */
+export async function filterMapData(ids) {
   if (!app.webmap) return;
   const [{ whenFalseOnce }, geometryEngine] = await loadModules([
     "esri/core/watchUtils",
     "esri/geometry/geometryEngine",
   ]);
 
-  const where = `FID in (${names.join(",")})`;
+  const where = `FID in (${ids.join(",")})`;
 
   await app.webmap.load();
   const layer = app.webmap.layers.getItemAt(1); // could be better
