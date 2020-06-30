@@ -1,4 +1,4 @@
-import { loadModules } from "esri-loader";
+import { loadModules } from 'esri-loader';
 
 export let credential = null;
 
@@ -12,8 +12,8 @@ let oauthInfo = null;
  */
 export const initialize = async (appId, portalUrl) => {
   const [IdentityManager, OAuthInfo] = await loadModules([
-    "esri/identity/IdentityManager",
-    "esri/identity/OAuthInfo",
+    'esri/identity/IdentityManager',
+    'esri/identity/OAuthInfo',
   ]);
   if (!oauthInfo) {
     oauthInfo = new OAuthInfo({
@@ -30,7 +30,7 @@ export const initialize = async (appId, portalUrl) => {
  */
 export const checkCurrentStatus = async () => {
   const [IdentityManager] = await loadModules([
-    "esri/identity/IdentityManager",
+    'esri/identity/IdentityManager',
   ]);
   IdentityManager.checkSignInStatus(`${oauthInfo.portalUrl}/sharing`);
 };
@@ -59,7 +59,7 @@ export const signIn = async () => {
  */
 export const signOut = async () => {
   const [IdentityManager] = await loadModules([
-    "esri/identity/IdentityManager",
+    'esri/identity/IdentityManager',
   ]);
   // make sure the IdentityManager has
   // the credential so it can destroy it
@@ -72,7 +72,7 @@ export const signOut = async () => {
  */
 export const fetchCredentials = async () => {
   const [IdentityManager] = await loadModules([
-    "esri/identity/IdentityManager",
+    'esri/identity/IdentityManager',
   ]);
   credential = await IdentityManager.getCredential(
     `${oauthInfo.portalUrl}/sharing`,
