@@ -8,10 +8,10 @@ export default function useView() {
     const loadView = async () => {
       const { initView } = await import('../data/map');
       const mapView = await initView(container, searchContainer);
-    }
+    };
 
     loadView();
   }, [container, searchContainer]);
 
-  return {setContainer, setSearchContainer};
+  return { setContainer, setSearchContainer };
 }

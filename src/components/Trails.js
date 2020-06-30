@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useRef, useState } from "react";
+import React, { useEffect, useContext, useRef, useState } from 'react';
 import {
   Button,
   Checkbox,
@@ -10,19 +10,19 @@ import {
   ListItemText,
   Slider,
   Typography,
-} from "@material-ui/core";
+} from '@material-ui/core';
 
-import { MapContext } from "../context";
-import useTrails from "../hooks/useTrails";
-import useView from "../hooks/useView";
-import useSelected from "../hooks/useSelected";
-import useFilter from "../hooks/useFilter";
-import { fetchTrails } from "../data/map";
+import { MapContext } from '../context';
+import useTrails from '../hooks/useTrails';
+import useView from '../hooks/useView';
+import useSelected from '../hooks/useSelected';
+import useFilter from '../hooks/useFilter';
+import { fetchTrails } from '../data/map';
 
-import TrailCard from "./TrailCard";
+import TrailCard from './TrailCard';
 
 const Trails = () => {
-  const {setContainer, setSearchContainer} = useView();
+  const { setContainer, setSearchContainer } = useView();
   const webmapid = useContext(MapContext);
   const maxElevation = useTrails(webmapid) || [];
   const { value, setCurrentValue } = useSelected();
@@ -60,18 +60,21 @@ const Trails = () => {
     return (
       <section className="app-container">
         <div className="toolbar">
-        <div ref={searchRef}></div>
+          <div ref={searchRef}></div>
         </div>
         <div className="map-container">
           <div className="sidebar">
             <h3>Trails</h3>
-            {(value || []).filter(({attributes}) => (
-              attributes.name.length > 2
-            )).map(({ attributes }, idx) => (
-              <TrailCard {...attributes} key={`trail-${attributes.name}-${idx}`} />
-            ))}
+            {(value || [])
+              .filter(({ attributes }) => attributes.name.length > 2)
+              .map(({ attributes }, idx) => (
+                <TrailCard
+                  {...attributes}
+                  key={`trail-${attributes.name}-${idx}`}
+                />
+              ))}
           </div>
-          <div style={{ width: "100%", height: "100%" }} ref={elementRef}></div>
+          <div style={{ width: '100%', height: '100%' }} ref={elementRef}></div>
         </div>
       </section>
     );
@@ -146,19 +149,27 @@ const Trails = () => {
           </p>
 
           <p>
-            <Button variant="outlined" color="primary" onClick={doSearch}>Search</Button>
+            <Button variant="outlined" color="primary" onClick={doSearch}>
+              Search
+            </Button>
           </p>
         </Container>
-        <Container fixed> 
-        <List>
-              {(value || []).filter(({attributes}) => (
-                attributes.name.length > 2
-              )).map(({ attributes: { FID, name, type } }, idx) => (
-                <ListItem button key={`list-item-${name}-${idx}`} onClick={() => setName(FID)}>
-                  <ListItemText>{name} - {type}</ListItemText>
+        <Container fixed>
+          <List>
+            {(value || [])
+              .filter(({ attributes }) => attributes.name.length > 2)
+              .map(({ attributes: { FID, name, type } }, idx) => (
+                <ListItem
+                  button
+                  key={`list-item-${name}-${idx}`}
+                  onClick={() => setName(FID)}
+                >
+                  <ListItemText>
+                    {name} - {type}
+                  </ListItemText>
                 </ListItem>
               ))}
-        </List>
+          </List>
         </Container>
       </main>
     );

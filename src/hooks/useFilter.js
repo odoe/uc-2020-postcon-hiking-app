@@ -7,7 +7,7 @@ export default function useFilter(names) {
         const { filterMapData } = await import('../data/map');
         filterMapData(names);
       }
-    }
+    };
     filter();
   }, [names]);
 

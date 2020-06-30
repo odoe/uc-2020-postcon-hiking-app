@@ -20,7 +20,7 @@ export default function useTrails(id) {
     // const { features } = await layer.queryFeatures(query)
     // const managers = features.map(({ attributes: a }) => a.manager)
     // setTrails(managers.sort());
-  }
+  };
 
   useEffect(() => {
     loadMap(id);
