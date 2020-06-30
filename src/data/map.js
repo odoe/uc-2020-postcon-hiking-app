@@ -178,8 +178,8 @@ export async function initWebMap() {
 
 /**
  * Creates and Search widget
- * @param {HTMLElement} container 
- * @param {MapView} view 
+ * @param {HTMLElement} container
+ * @param {MapView} view
  * @returns Promise<`esri/widgets/Search`>
  */
 export async function addSearch(container, view) {
@@ -212,7 +212,7 @@ export async function addSearch(container, view) {
 
 /**
  * Initialize the MapView for the application
- * @param {HTMLElement} container 
+ * @param {HTMLElement} container
  * @param {HTMLElement} searchContainer
  * @returns Promise<void>
  */
@@ -403,8 +403,8 @@ export async function fetchMaxElevation() {
 }
 
 /**
- * 
- * @param {{ min: Number, max: Number }}} elevation 
+ *
+ * @param {{ min: Number, max: Number }}} elevation
  * @param {{ dog: String, bike: String, hore: String }} attributes
  * @returns Promise<{ features: `esri/Graphic` }>
  */
@@ -433,17 +433,17 @@ export async function fetchTrails(elevation, { dogs, bike, horse }) {
 
 /**
  * Filters map based on Feature Ids
- * @param {String[]} ids 
+ * @param {String[]} ids
  * @returns Promise<void>
  */
-export async function filterMapData(ids) {
+export async function filterMapData(fids) {
   if (!app.webmap) return;
   const [{ whenFalseOnce }, geometryEngine] = await loadModules([
     'esri/core/watchUtils',
     'esri/geometry/geometryEngine',
   ]);
 
-  const where = `FID in (${ids.join(",")})`;
+  const where = `FID in (${fids.join(',')})`;
 
   await app.webmap.load();
   const layer = app.webmap.layers.getItemAt(1); // could be better
