@@ -1,9 +1,9 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import HomePage from './HomePage';
+import WhereTo from './WhereTo';
 
 test('renders component', () => {
-  const { getByTestId } = render(<HomePage />);
-  const component = getByTestId('HomePage');
+  const { getByTestId } = render(<WhereTo />);
+  const component = getByTestId('WhereTo');
   expect(component).toBeInTheDocument();
 });

@@ -1,5 +1,5 @@
 // Framework and third-party non-ui
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Switch, Route, NavLink } from 'react-router-dom';
 
 // Hooks, context, and constants
@@ -59,7 +59,7 @@ const App = ({ user = {} }) => {
 
   return (
     <UserContext.Provider value={userInfo}>
-      <StyledApp>
+      <StyledApp data-testid="App">
         <ToastContainer />
         <TopNav>
           <TopNavBrand as={NavLink} to={Routes.Home} src={Logo} />
