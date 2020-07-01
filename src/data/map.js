@@ -247,7 +247,6 @@ export async function mainSearch(container, callback) {
     }
   });
 
-
   return search;
 }
 
