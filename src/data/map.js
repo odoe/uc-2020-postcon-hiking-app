@@ -1,4 +1,5 @@
 import { loadModules, loadCss } from 'esri-loader';
+import { calculateAltitudeGainLoss } from '../utils/utils.js';
 
 // Object to handle module level variables
 const app = {};
@@ -388,29 +389,6 @@ export async function initView(container, searchContainer) {
 
   return view;
 }
-
-/**
- * Calculate the Altitude Gain and Loss
- * @param {Number[]} paths
- * @returns { gain: Number, loss: Number }
- */
-const calculateAltitudeGainLoss = (paths) => {
-  let gain = 0;
-  let loss = 0;
-  console.log('paths ', paths);
-  for (let i = 0; i < paths[0].length - 1; i++) {
-    const diff = paths[0][i][2] - paths[0][i + 1][2];
-    if (Math.sign(diff) === 1) {
-      gain += diff;
-    } else {
-      loss += diff;
-    }
-  }
-  return {
-    gain: gain,
-    loss: loss,
-  };
-};
 
 /**
  * Creates a renderer using a given Arcade Expression
