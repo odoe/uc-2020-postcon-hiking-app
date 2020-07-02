@@ -12,16 +12,16 @@ import {
   Typography,
 } from '@material-ui/core';
 
-import { MapContext } from '../context';
-import useTrails from '../hooks/useTrails';
-import useView from '../hooks/useView';
-import useSelected from '../hooks/useSelected';
-import useFilter from '../hooks/useFilter';
-import { fetchTrails } from '../data/map';
+import { MapContext } from 'context';
+import useTrails from 'hooks/useTrails';
+import useView from 'hooks/useView';
+import useSelected from 'hooks/useSelected';
+import useFilter from 'hooks/useFilter';
+import { fetchTrails } from 'data/map';
 
-import TrailCard from './TrailCard';
+import TrailCard from '../TrailCard';
 
-const Trails = () => {
+const TrailsOriginal = () => {
   const { setContainer, setSearchContainer } = useView();
   const webmapid = useContext(MapContext);
   const maxElevation = useTrails(webmapid) || [];
@@ -176,4 +176,4 @@ const Trails = () => {
   }
 };
 
-export default Trails;
+export default TrailsOriginal;
