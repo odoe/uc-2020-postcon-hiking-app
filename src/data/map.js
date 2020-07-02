@@ -184,9 +184,10 @@ export async function initWebMap() {
  */
 export async function addSearch(container, view) {
   loadCss();
-  const [Search, Locator] = await loadModules([
+  const [Search, Locator, FeatureLayer] = await loadModules([
     'esri/widgets/Search',
     'esri/tasks/Locator',
+    'esri/layers/FeatureLayer'
   ]);
 
   return new Search({
@@ -194,16 +195,29 @@ export async function addSearch(container, view) {
     includeDefaultSources: false,
     sources: [
       {
-        locator: new Locator({
+        // locator: new Locator({
+        //   url:
+        //     'https://utility.arcgis.com/usrsvcs/servers/b34c620191be4b6f9c25576a9758bfdb/rest/services/World/GeocodeServer',
+        // }),
+        layer: new FeatureLayer({
           url:
-            'https://utility.arcgis.com/usrsvcs/servers/b34c620191be4b6f9c25576a9758bfdb/rest/services/World/GeocodeServer',
+            'https://services.arcgis.com/V6ZHFr6zdgNZuVG0/ArcGIS/rest/services/CPW_Trails/FeatureServer/2',
         }),
-        singleLineFieldName: 'SingleLine',
-        name: 'Colorado Search',
-        placeholder: 'Search Colorado',
+        searchFields: ['name'],
+        displayField: 'name',
+        exactMatch: false,
+        outFields: ['*'],
+        name: 'Colorado Trail Search',
+        placeholder: 'Search Colorado Trails',
         maxResults: 3,
         maxSuggestions: 6,
         minSuggestCharacters: 0,
+        // singleLineFieldName: 'SingleLine',
+        // name: 'Colorado Search',
+        // placeholder: 'Search Colorado',
+        // maxResults: 3,
+        // maxSuggestions: 6,
+        // minSuggestCharacters: 0,
       },
     ],
     container,
