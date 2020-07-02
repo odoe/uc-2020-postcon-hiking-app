@@ -12,7 +12,7 @@ import { StyledPageWrapper } from 'pages/Pages-styled';
 const MapPage = () => {
   return (
     <StyledPageWrapper data-testid="MapPage">
-      <Trails />
+      {/* <Trails /> */}
     </StyledPageWrapper>
   );
 };
