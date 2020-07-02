@@ -346,7 +346,7 @@ const calculateAltitudeGainLoss = (paths) => {
   console.log('paths ', paths);
   for (let i = 0; i < paths[0].length - 1; i++) {
     const diff = paths[0][i][2] - paths[0][i + 1][2];
-    if (Math.sign(diff) == 1) {
+    if (Math.sign(diff) === 1) {
       gain += diff;
     } else {
       loss += diff;
