@@ -10,8 +10,7 @@ import {
 } from '@material-ui/core';
 
 import { Biking, Dog, Hiking, Horse, Road, Vehicle } from './../icons/icons';
-
-const percentSlope = (r, d) => (r > 0 && d > 0 ? (r / d) * 100 : 0.0);
+import { percentSlope } from '../utils/utils.js';
 
 const trailDifficulty = (slope) => {
   if (slope <= 5)
