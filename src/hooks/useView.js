@@ -7,7 +7,8 @@ export default function useView() {
   useEffect(() => {
     const loadView = async () => {
       const { initView } = await import('../data/map');
-      const mapView = await initView(container, searchContainer);
+      // const mapView = await initView(container, searchContainer);
+      await initView(container, searchContainer);
     };
 
     loadView();
