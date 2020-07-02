@@ -59,7 +59,7 @@ const App = ({ user = {} }) => {
 
   return (
     <UserContext.Provider value={userInfo}>
-      <StyledApp data-testid="App">
+      <StyledApp>
         <ToastContainer />
         <TopNav>
           <TopNavBrand as={NavLink} to={Routes.Home} src={Logo} />

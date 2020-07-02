@@ -1,0 +1,20 @@
+[
+  {
+    "id": 0,
+    "name": "Emerald Lake Trail",
+    "photo": "https://picsum.photos/400/200?random=1",
+    "description": "Emerald Lake Trail  is a 3.1 mile heavily trafficked out and back trail located near Estes Park, Colorado that features a lake and is rated as moderate."
+  },
+  {
+    "id": 1,
+    "name": "Royal Arch Trail",
+    "photo": "https://picsum.photos/400/200?random=2",
+    "description": "Royal Arch Trail is a 4 mile heavily trafficked out and back trail located near Boulder, Colorado that features beautiful wild flowers and is rated as difficult."
+  },
+  {
+    "id": 2,
+    "name": "Hanging Lake Trail",
+    "photo": "https://picsum.photos/400/200?random=3",
+    "description": "Hanging Lake Trail  is a 3 mile heavily trafficked out and back trail located near Glenwood Springs, Colorado that features a lake and is rated as moderate."
+  }
+]
