@@ -65,7 +65,8 @@ const trailSym = {
  * Initialize the WebMap used in the application
  * @returns Promise<`esri/WebMap`>
  */
-export async function initWebMap() {
+export async function initWebMap(id) {
+  if (!id) return null;
   const [
     WebMap,
     Bookmark,
@@ -95,9 +96,7 @@ export async function initWebMap() {
     JSON.parse(localStorage.getItem('trail-bookmarks')) || [];
 
   const webmap = new WebMap({
-    portalItem: {
-      id: '8744e84b32e74bffb34b0b1edf0c3d60',
-    },
+    portalItem: { id },
     bookmarks: bookmarksLocal.map((a) => Bookmark.fromJSON(a)),
   });
 
@@ -185,10 +184,9 @@ export async function initWebMap() {
  */
 export async function addSearch(container, view) {
   loadCss();
-  const [Search, Locator, FeatureLayer] = await loadModules([
+  const [Search, FeatureLayer] = await loadModules([
     'esri/widgets/Search',
-    'esri/tasks/Locator',
-    'esri/layers/FeatureLayer'
+    'esri/layers/FeatureLayer',
   ]);
 
   return new Search({
@@ -226,7 +224,6 @@ export async function addSearch(container, view) {
 }
 
 export async function mainSearch(container, callback) {
-  console.log('mainSearch', container, callback);
   loadCss();
   const [Search, FeatureLayer] = await loadModules([
     'esri/widgets/Search',
@@ -256,7 +253,6 @@ export async function mainSearch(container, callback) {
   });
 
   search.on('search-complete', ({ results }) => {
-    console.log('search event', results, callback);
     if (callback && typeof callback === 'function') {
       callback(results);
     }
@@ -271,21 +267,12 @@ export async function mainSearch(container, callback) {
  * @param {HTMLElement} searchContainer
  * @returns Promise<void>
  */
-export async function initView(container, searchContainer) {
+export async function initView(container, searchContainer, lat, lon, zoom) {
   loadCss();
-  const [
-    Graphic,
-    MapView,
-    BasemapToggle,
-    Bookmarks,
-    Directions,
-    Expand,
-  ] = await loadModules([
-    'esri/Graphic',
+  const [MapView, BasemapToggle, Bookmarks, Expand] = await loadModules([
     'esri/views/MapView',
     'esri/widgets/BasemapToggle',
     'esri/widgets/Bookmarks',
-    'esri/widgets/Directions',
     'esri/widgets/Expand',
   ]);
 
@@ -337,23 +324,7 @@ export async function initView(container, searchContainer) {
 
     addSearch(searchContainer, view);
 
-    const directions = new Directions({
-      routeServiceUrl:
-        'https://utility.arcgis.com/usrsvcs/servers/b34c620191be4b6f9c25576a9758bfdb/rest/services/World/GeocodeServer',
-      view: view,
-    });
-
-    const directionsExpand = new Expand({
-      content: directions,
-    });
-
     view.ui.move('zoom', 'top-right');
-
-    view.ui.add(directionsExpand, 'top-right');
-
-    app.directions = directions;
-
-    directions.viewModel.stops.on('change', (changes) => console.log(changes));
   });
 
   app.view.popup.on('trigger-action', ({ action }) => {
@@ -365,25 +336,6 @@ export async function initView(container, searchContainer) {
           console.log('elevation result', result);
           console.log(calculateAltitudeGainLoss(result.geometry.paths));
         });
-    }
-    if (action.id === 'fetch-directions') {
-      app.directions.viewModel.stops.addMany([
-        new Graphic({
-          attributes: {},
-          geometry: {
-            type: 'point',
-            longitude: -104.9903,
-            latitude: 39.7392,
-          },
-        }),
-        new Graphic({
-          attributes: {},
-          geometry: app.view.popup.selectedFeature.geometry.clone(),
-        }),
-      ]);
-      app.directions.viewModel.load().then(() => {
-        app.directions.getDirections();
-      });
     }
   });
 

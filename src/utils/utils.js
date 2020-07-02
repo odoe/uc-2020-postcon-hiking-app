@@ -2,14 +2,16 @@
  * Finds the percent slope given a rise and run
  * @returns Number
  */
-export function percentSlope(r, d) { return r > 0 && d > 0 ? (r / d) * 100 : 0.0};
+export function percentSlope(r, d) {
+  return r > 0 && d > 0 ? (r / d) * 100 : 0.0;
+}
 
 /**
  * Calculate the Altitude Gain and Loss
  * @param {Number[]} paths
  * @returns { gain: Number, loss: Number }
  */
-export function calculateAltitudeGainLoss( paths ) {
+export function calculateAltitudeGainLoss(paths) {
   let gain = 0;
   let loss = 0;
   console.log('paths ', paths);
@@ -25,4 +27,4 @@ export function calculateAltitudeGainLoss( paths ) {
     gain: gain,
     loss: loss,
   };
-};
+}
