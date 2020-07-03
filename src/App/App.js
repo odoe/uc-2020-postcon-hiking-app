@@ -7,7 +7,6 @@ import useSelected from 'hooks/useSelected';
 import { UserContext, SelectedContext } from 'contexts/context';
 import MapContextProvider from 'contexts/MapContext';
 import Routes from 'constants/routes';
-import { webmapId } from 'constants/map';
 
 // App pages & components
 import HomePage from 'pages/HomePage';

@@ -16,8 +16,7 @@ const Map = () => {
   const { setMapView } = useContext(MapContext);
   const [ref, view] = useWebMap(webmapId);
 
-  const handleMapReady = (e) => {
-    console.log(view);
+  const handleMapReady = () => {
     setMapView(view);
   };
 
