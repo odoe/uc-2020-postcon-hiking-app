@@ -185,10 +185,10 @@ export async function initWebMap() {
  */
 export async function addSearch(container, view) {
   loadCss();
-  const [Search, Locator, FeatureLayer] = await loadModules([
+  const [Search, FeatureLayer] = await loadModules([
     'esri/widgets/Search',
     'esri/tasks/Locator',
-    'esri/layers/FeatureLayer'
+    'esri/layers/FeatureLayer',
   ]);
 
   return new Search({
