@@ -18,7 +18,8 @@ const StyledSearchContainer = styled.div`
 const StyledQuickLinksContainer = styled.div`
   padding-top: 1rem;
   width: 100%;
-  color: white;
+  color: #4c4c4c;
+  text-align: start;
 
   a {
     margin: 0 0.5rem;

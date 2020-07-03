@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import HeroImage from 'assets/hero-bg.jpg';
+import { CalciteH1 } from 'calcite-react/Elements';
 
 const StyledHero = styled.section`
   display: flex;
@@ -15,11 +16,16 @@ const StyledHero = styled.section`
   background-attachment: fixed;
 `;
 
+const StyledCalciteH1 = styled(CalciteH1)`
+  font-weight: bold;
+  font-size: 5rem;
+  color: 
+`;
+
 const StyledHeroContainer = styled.div`
   display: flex;
   flex: 0 2 auto;
   flex-direction: column;
-  color: white;
 `;
 
 const StyledHeroTitle = styled.div`
@@ -27,4 +33,4 @@ const StyledHeroTitle = styled.div`
 
 `;
 
-export { StyledHero, StyledHeroContainer, StyledHeroTitle };
+export { StyledHero, StyledCalciteH1, StyledHeroContainer, StyledHeroTitle };

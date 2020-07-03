@@ -9,6 +9,7 @@ import {
   StyledHero,
   StyledHeroContainer,
   StyledHeroTitle,
+  StyledCalciteH1
 } from './Hero-styled';
 
 // Third-party components (buttons, icons, etc.)
@@ -18,7 +19,7 @@ const Hero = () => {
   return (
     <StyledHero data-testid="Hero">
       <StyledHeroTitle>
-        <CalciteH1>Discover Colorado</CalciteH1>
+        <StyledCalciteH1>Discover Colorado</StyledCalciteH1>
         <CalciteH2>Plan your next outdoor adventure</CalciteH2>
       </StyledHeroTitle>
       <StyledHeroContainer>
