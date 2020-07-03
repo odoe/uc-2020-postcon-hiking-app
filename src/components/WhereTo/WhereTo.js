@@ -14,8 +14,8 @@ import {
 // Third-party components (buttons, icons, etc.)
 import { CalciteH1, CalciteA } from 'calcite-react/Elements';
 import Button from 'calcite-react/Button';
-import Search from 'calcite-react/Search';
 import GpsOnIcon from 'calcite-ui-icons-react/GpsOnIcon';
+import TrailSearch from 'components/TrailSearch';
 
 const WhereTo = () => {
   const getQuickLinks = () => {
@@ -39,7 +39,7 @@ const WhereTo = () => {
       <CalciteH1>Where to?</CalciteH1>
       <StyledSearchContainer>
         <StyledFormControl horizontal noValidation>
-          <Search fullWidth />
+          <TrailSearch fullWidth />
           <Button iconButton icon={<GpsOnIcon />} />
         </StyledFormControl>
       </StyledSearchContainer>

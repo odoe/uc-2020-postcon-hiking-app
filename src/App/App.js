@@ -4,9 +4,9 @@ import { Switch, Route, NavLink } from 'react-router-dom';
 
 // Hooks, context, and constants
 import useSelected from 'hooks/useSelected';
-import { UserContext, MapContext, SelectedContext } from 'context';
+import { UserContext, SelectedContext } from 'contexts/context';
+import MapContextProvider from 'contexts/MapContext';
 import Routes from 'constants/routes';
-import { webmapId } from 'constants/map';
 
 // App pages & components
 import HomePage from 'pages/HomePage';
@@ -38,6 +38,24 @@ const App = ({ user = {} }) => {
   // }, [user]);
 
   const getPages = () => {
+    // return (
+    //   <Switch>
+    //     <Route exact path={Routes.Home}>
+    //       <HomePage user={user} />
+    //     </Route>
+    //     <Route path={Routes.Map}>
+    //       <SelectedContext.Provider value={value}>
+    //         <MapContext.Provider value={webmapId}>
+    //           <MapPage />
+    //         </MapContext.Provider>
+    //       </SelectedContext.Provider>
+    //     </Route>
+    //     <Route path="*">
+    //       <NoMatch />
+    //     </Route>
+    //   </Switch>
+    // );
+
     return (
       <Switch>
         <Route exact path={Routes.Home}>
@@ -45,9 +63,10 @@ const App = ({ user = {} }) => {
         </Route>
         <Route path={Routes.Map}>
           <SelectedContext.Provider value={value}>
-            <MapContext.Provider value={webmapId}>
+            <MapContextProvider>
+              <HomePage user={user} />
               <MapPage />
-            </MapContext.Provider>
+            </MapContextProvider>
           </SelectedContext.Provider>
         </Route>
         <Route path="*">
