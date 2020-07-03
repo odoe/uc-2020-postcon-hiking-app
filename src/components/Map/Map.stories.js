@@ -1,9 +1,17 @@
 import React from 'react';
-import Hero from '.';
+import Map from '.';
+
+// Setup esri-loader
+import { setDefaultOptions } from 'esri-loader';
+setDefaultOptions({ version: 'next', css: true });
 
 export default {
-  title: 'Hero',
-  component: Hero,
+  title: 'Map',
+  component: Map,
 };
 
-export const Default = () => <Hero>Hero</Hero>;
+export const Default = () => (
+  <div style={{ height: '800px', width: '800px' }}>
+    <Map>Map</Map>
+  </div>
+);
