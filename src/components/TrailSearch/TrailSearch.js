@@ -3,13 +3,13 @@ import React, { useContext, useState, useEffect } from 'react';
 
 // App components
 import { MapContext } from 'contexts/MapContext';
+import { init, suggest } from './TrailSearchController';
 
 // JSON & Styles
 import { StyledTrailSearch } from './TrailSearch-styled';
 
 // Third-party components (buttons, icons, etc.)
 import Search from 'calcite-react/Search';
-import { init, suggest } from './TrailSearchController';
 
 const TrailSearch = ({ ...rest }) => {
   const { mapView } = useContext(MapContext);
@@ -17,6 +17,7 @@ const TrailSearch = ({ ...rest }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [results, setResults] = useState([]);
 
+  // When the mapView is loaded from context, create a SearchViewModel
   useEffect(() => {
     async function loadVM() {
       const vm = await init({ view: mapView });
@@ -27,10 +28,10 @@ const TrailSearch = ({ ...rest }) => {
     }
   }, [mapView]);
 
+  // When the search term changes, ask the view model for suggestions
   useEffect(() => {
     async function getSuggestions() {
       const suggestions = await suggest({ vm, value: searchTerm });
-      console.log(suggestions);
       setResults(suggestions);
     }
     if (vm && searchTerm) {
@@ -38,16 +39,16 @@ const TrailSearch = ({ ...rest }) => {
     }
   }, [vm, searchTerm]);
 
+  // Clear both the search term and results
   const clearSearch = () => {
     setSearchTerm('');
     setResults([]);
   };
 
+  // Handle Search's user actions
   const onUserAction = (inputValue, selectedItemVal) => {
     if (!inputValue) {
-      console.log('no input value!!!');
-      clearSearch();
-      return;
+      return clearSearch();
     }
 
     if (inputValue === searchTerm) {
@@ -67,6 +68,7 @@ const TrailSearch = ({ ...rest }) => {
         onUserAction={onUserAction}
         onRequestClear={clearSearch}
         dataSourceConfig={{ label: 'text', value: 'text' }}
+        remote
         {...rest}
       />
     </StyledTrailSearch>
