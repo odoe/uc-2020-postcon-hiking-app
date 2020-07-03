@@ -13,14 +13,14 @@ import { StyledPageWrapper } from 'pages/Pages-styled';
 
 const HomePage = () => {
   return (
-    <StyledPageWrapper data-testid="HomePage">
+    <>
       <Hero />
       <PopularTrailsContainer>
         <PopularTrail id={0} />
         <PopularTrail id={1} />
         <PopularTrail id={2} />
       </PopularTrailsContainer>
-    </StyledPageWrapper>
+    </>
   );
 };
 

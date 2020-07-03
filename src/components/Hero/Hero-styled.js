@@ -1,41 +1,30 @@
 import styled from 'styled-components';
 import HeroImage from 'assets/hero-bg.jpg';
 
-const StyledHero = styled.div`
+const StyledHero = styled.section`
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-size: cover;
-  background-position: center;
-  width: 100wh;
-  height: 850px;
-  padding: 2rem;
-  background: lightgray;
+  width: 100vw;
+  height: 40rem;
+  background: #3C1802;
   background-image: url(${() => HeroImage});
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
+  background-attachment: fixed;
 `;
 
 const StyledHeroContainer = styled.div`
   display: flex;
   flex: 0 2 auto;
   flex-direction: column;
-  margin: auto;
-  width: 50%;
+  color: white;
 `;
 
 const StyledHeroTitle = styled.div`
-  color: white;
-  flex: 0 1 auto;
-  display: flex;
-  overflow: auto;
-  width: 100%;
+  margin: 3rem auto;
+
 `;
 
-const StyledHeroHeadline = styled.div`
-  padding-left: 1rem;
-  text-align: left;
-`;
-
-export { StyledHero, StyledHeroContainer, StyledHeroTitle, StyledHeroHeadline };
+export { StyledHero, StyledHeroContainer, StyledHeroTitle };

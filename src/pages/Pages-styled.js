@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-const StyledPageWrapper = styled.div`
+const StyledPageWrapper = styled.main`
   box-sizing: border-box;
   overflow: auto;
   width: 100%;

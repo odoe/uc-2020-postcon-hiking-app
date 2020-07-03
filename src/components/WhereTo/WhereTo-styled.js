@@ -16,10 +16,9 @@ const StyledSearchContainer = styled.div`
 `;
 
 const StyledQuickLinksContainer = styled.div`
-  display: flex;
   padding-top: 1rem;
   width: 100%;
-  justify-content: space-evenly;
+  color: white;
 
   a {
     margin: 0 0.5rem;

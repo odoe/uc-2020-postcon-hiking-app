@@ -1,6 +1,6 @@
 // Framework and third-party non-ui
 import React, { useState } from 'react';
-import { Switch, Route, NavLink } from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
 
 // Hooks, context, and constants
 import useSelected from 'hooks/useSelected';
@@ -12,22 +12,12 @@ import { webmapId } from 'constants/map';
 import HomePage from 'pages/HomePage';
 import MapPage from 'pages/MapPage';
 import NoMatch from 'pages/NoMatch';
-import LoginLink from './LoginLink';
-import AccountMenu from './AccountMenu';
 
 // JSON & Styles
-import { StyledApp, OuterWrapper, InnerWrapper } from './App-styled';
-import Logo from 'assets/logo.svg';
+import { StyledApp } from './App-styled';
 
 // Third-party components (buttons, icons, etc.)
 import { ToastContainer } from 'calcite-react/Toaster';
-import TopNav, {
-  TopNavBrand,
-  TopNavTitle,
-  TopNavList,
-  TopNavLink,
-  TopNavActionsList,
-} from 'calcite-react/TopNav';
 
 const App = ({ user = {} }) => {
   const value = useSelected();
@@ -61,25 +51,7 @@ const App = ({ user = {} }) => {
     <UserContext.Provider value={userInfo}>
       <StyledApp data-testid="App">
         <ToastContainer />
-        <TopNav>
-          <TopNavBrand as={NavLink} to={Routes.Home} src={Logo} />
-          <TopNavTitle as={NavLink} to={Routes.Home}>
-            Discover Colorado
-          </TopNavTitle>
-          <TopNavList>
-            <TopNavLink as={NavLink} to={Routes.Map}>
-              Map
-            </TopNavLink>
-          </TopNavList>
-          <TopNavActionsList>
-            {user.username ? <AccountMenu user={user} /> : <LoginLink />}
-          </TopNavActionsList>
-        </TopNav>
-        <OuterWrapper>
-          <InnerWrapper>
-            <div className="App">{getPages()}</div>
-          </InnerWrapper>
-        </OuterWrapper>
+        <div className="App">{getPages()}</div>
       </StyledApp>
     </UserContext.Provider>
   );

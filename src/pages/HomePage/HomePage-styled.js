@@ -2,9 +2,9 @@ import styled from 'styled-components';
 
 const PopularTrailsContainer = styled.div`
   width: 100%;
-  padding: 4rem;
   display: flex;
-  justify-content: space-evenly;
+  flex-direction: row;
+  justify-content: space-between;
 `;
 
 export { PopularTrailsContainer };
