@@ -3,13 +3,18 @@ import React, { useContext, useState, useEffect } from 'react';
 
 // App components
 import { MapContext } from 'contexts/MapContext';
-import { init, suggest } from './TrailSearchController';
+import { init, suggest, search } from './TrailSearchController';
 
 // JSON & Styles
 import { StyledTrailSearch } from './TrailSearch-styled';
 
 // Third-party components (buttons, icons, etc.)
 import Search from 'calcite-react/Search';
+import { ListItem, ListItemTitle, ListItemSubtitle } from 'calcite-react/List';
+import GlobeIcon from 'calcite-ui-icons-react/GlobeIcon';
+import WalkingIcon from 'calcite-ui-icons-react/WalkingIcon';
+import CarIcon from 'calcite-ui-icons-react/CarIcon';
+import PinIcon from 'calcite-ui-icons-react/PinIcon';
 
 const TrailSearch = ({ ...rest }) => {
   const { mapView } = useContext(MapContext);
@@ -45,8 +50,22 @@ const TrailSearch = ({ ...rest }) => {
     setResults([]);
   };
 
+  const getIcon = (source) => {
+    switch (source) {
+      case 'Trail':
+        return <WalkingIcon size={32} />;
+      case 'Trailhead':
+        return <CarIcon size={32} />;
+      case 'Place':
+        return <PinIcon size={32} />;
+      default:
+        return <GlobeIcon size={32} />;
+    }
+  };
+
   // Handle Search's user actions
   const onUserAction = (inputValue, selectedItemVal) => {
+    console.log('onUserAction', inputValue);
     if (!inputValue) {
       return clearSearch();
     }
@@ -58,19 +77,39 @@ const TrailSearch = ({ ...rest }) => {
     setSearchTerm(inputValue);
   };
 
+  const onChange = async ({ value }) => {
+    console.log('onChange', value);
+    const result = await search({ vm, value });
+    console.log(result);
+  };
+
   return (
     <StyledTrailSearch data-testid="TrailSearch">
       {/* TODO: How can we load the search before the mapView is ready...? */}
       <Search
         placeholder={vm ? 'Search...' : 'Loading...'}
         inputValue={searchTerm}
-        items={results}
         onUserAction={onUserAction}
+        onChange={onChange}
         onRequestClear={clearSearch}
         dataSourceConfig={{ label: 'text', value: 'text' }}
         remote
         {...rest}
-      />
+      >
+        {results.map((item) => {
+          return (
+            <ListItem
+              key={item.key}
+              value={item.suggestResult}
+              label={item.text}
+              leftNode={getIcon(item.source)}
+            >
+              <ListItemTitle>{item.text}</ListItemTitle>
+              <ListItemSubtitle>{item.source}</ListItemSubtitle>
+            </ListItem>
+          );
+        })}
+      </Search>
     </StyledTrailSearch>
   );
 };

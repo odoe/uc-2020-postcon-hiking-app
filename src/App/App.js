@@ -58,10 +58,7 @@ const App = ({ user = {} }) => {
 
     return (
       <Switch>
-        <Route exact path={Routes.Home}>
-          <HomePage user={user} />
-        </Route>
-        <Route path={Routes.Map}>
+        <Route path={Routes.Home}>
           <SelectedContext.Provider value={value}>
             <MapContextProvider>
               <HomePage user={user} />
