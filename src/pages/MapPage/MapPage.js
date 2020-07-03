@@ -4,6 +4,7 @@ import React from 'react';
 // App components
 import SubNav from 'components/SubNav';
 import Sidebar from 'components/Sidebar';
+import Map from 'components/Map';
 
 // JSON & Styles
 import { StyledPageWrapper } from 'pages/Pages-styled';
@@ -24,17 +25,7 @@ const MapPage = () => {
           <Sidebar />
         </StyledSidebar>
         <StyledMapContainer>
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              width: '100%',
-              fontSize: '3rem',
-            }}
-          >
-            <div>MAP PLACEHOLDER</div>
-          </div>
+          <Map />
         </StyledMapContainer>
       </StyledInnerWrapper>
     </StyledPageWrapper>
