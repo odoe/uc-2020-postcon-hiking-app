@@ -12,7 +12,7 @@ import {
   Typography,
 } from '@material-ui/core';
 
-import { MapContext } from 'context';
+import { MapContext } from 'contexts/context';
 import useTrails from 'hooks/useTrails';
 import useView from 'hooks/useView';
 import useSelected from 'hooks/useSelected';
