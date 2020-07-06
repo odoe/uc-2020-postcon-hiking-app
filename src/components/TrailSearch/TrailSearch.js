@@ -1,5 +1,6 @@
 // Framework and third-party non-ui
 import React, { useContext, useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 
 // App components
 import { MapContext } from 'contexts/MapContext';
@@ -21,6 +22,7 @@ const TrailSearch = ({ ...rest }) => {
   const [vm, setVm] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [results, setResults] = useState([]);
+  const history = useHistory();
 
   // When the mapView is loaded from context, create a SearchViewModel
   useEffect(() => {
@@ -81,6 +83,7 @@ const TrailSearch = ({ ...rest }) => {
     console.log('onChange', value);
     const result = await search({ vm, value });
     console.log(result);
+    history.push('/details');
   };
 
   return (

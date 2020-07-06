@@ -1,41 +1,52 @@
 import styled from 'styled-components';
 import HeroImage from 'assets/hero-bg.jpg';
+import { CalciteH1, CalciteH2 } from 'calcite-react/Elements';
 
-const StyledHero = styled.div`
+const StyledHero = styled.section`
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-size: cover;
-  background-position: center;
-  width: 100wh;
-  height: 850px;
-  padding: 2rem;
-  background: lightgray;
+  height: 800px;
+  width: 100%;
+  background: #3c1802;
   background-image: url(${() => HeroImage});
-  background-position: center;
+  background-position: top;
   background-repeat: no-repeat;
-  background-size: cover;
+  background-attachment: fixed;
+`;
+
+const StyledCalciteH1 = styled(CalciteH1)`
+  font-weight: bold;
+  color: white;
+  text-shadow: 0 0 3px #ff0000;
+  font-size: 5rem;
+`;
+
+const StyledCalciteH2 = styled(CalciteH2)`
+  font-weight: bold;
+  color: white;
+  text-shadow: 0 0 3px #ff0000;
+  font-size: 2rem;
 `;
 
 const StyledHeroContainer = styled.div`
   display: flex;
   flex: 0 2 auto;
   flex-direction: column;
-  margin: auto;
-  width: 50%;
+  width: 45rem;
+  background: #ffffffef;
+  box-shadow: 0 0 8px black;
+  color: black;
 `;
 
 const StyledHeroTitle = styled.div`
-  color: white;
-  flex: 0 1 auto;
-  display: flex;
-  overflow: auto;
-  width: 100%;
+  margin: 3rem auto;
 `;
 
-const StyledHeroHeadline = styled.div`
-  padding-left: 1rem;
-  text-align: left;
-`;
-
-export { StyledHero, StyledHeroContainer, StyledHeroTitle, StyledHeroHeadline };
+export {
+  StyledHero,
+  StyledCalciteH1,
+  StyledCalciteH2,
+  StyledHeroContainer,
+  StyledHeroTitle,
+};

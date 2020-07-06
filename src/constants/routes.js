@@ -1,6 +1,6 @@
 const Routes = {
   Home: '/',
-  Map: '/map',
+  Map: '/:context',
 };
 
 export default Routes;
