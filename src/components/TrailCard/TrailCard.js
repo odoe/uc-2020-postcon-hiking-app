@@ -9,8 +9,9 @@ import {
   Typography,
 } from '@material-ui/core';
 
-import { Biking, Dog, Hiking, Horse, Road, Vehicle } from './../icons/icons';
-import { percentSlope } from '../utils/utils.js';
+import { Biking, Dog, Hiking, Horse, Road, Vehicle } from 'icons/icons';
+
+const percentSlope = (r, d) => (r > 0 && d > 0 ? (r / d) * 100 : 0.0);
 
 const trailDifficulty = (slope) => {
   if (slope <= 5)
@@ -53,6 +54,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function TrailCard(props) {
+  // TODO: This needs to be removed once we have real props flowing again
+  if (!props.FID) props = defaultProps;
+
   const classes = useStyles();
   const slope = percentSlope(
     props.max_elevat - props.min_elevat,
@@ -104,7 +108,7 @@ export default function TrailCard(props) {
                 color="primary"
                 style={{ float: 'right' }}
                 onClick={async () => {
-                  const { filterMapData } = await import('../data/map');
+                  const { filterMapData } = await import('data/map');
                   filterMapData([props.FID]);
                 }}
               >
@@ -118,3 +122,37 @@ export default function TrailCard(props) {
     </Card>
   );
 }
+
+const defaultProps = {
+  FID: 2744,
+  ogc_fid: 1939,
+  feature_id: '74040',
+  place_id: 5798,
+  name: 'Garnet Mesa Trail',
+  place_id_1: 0,
+  name_1: ' ',
+  place_id_2: 0,
+  name_2: ' ',
+  place_id_3: 0,
+  name_3: ' ',
+  trail_num: ' ',
+  surface: ' ',
+  oneway: ' ',
+  type: 'Trail',
+  hiking: ' ',
+  horse: ' ',
+  bike: ' ',
+  motorcycle: ' ',
+  atv: ' ',
+  ohv_gt_50: ' ',
+  highway_ve: ' ',
+  dogs: ' ',
+  access: ' ',
+  min_elevat: 1519.77038574,
+  max_elevat: 1543.66088867,
+  length_mi_: 0.1,
+  manager: 'City of Delta',
+  INPUT_DATE: 1569369600000,
+  EDIT_DATE: 1569369600000,
+  Shape__Length: 191.359418917475,
+};

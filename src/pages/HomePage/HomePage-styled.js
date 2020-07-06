@@ -1,10 +1,18 @@
 import styled from 'styled-components';
 
-const PopularTrailsContainer = styled.div`
-  width: 100%;
-  padding: 4rem;
+const HomePageLayout = styled.div`
+  position: relative;
+  background: #ffffff;
   display: flex;
-  justify-content: space-evenly;
+  flex-direction: column;
+  z-index: 2;
 `;
 
-export { PopularTrailsContainer };
+const PopularTrailsContainer = styled.section`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+`;
+
+export { HomePageLayout, PopularTrailsContainer };

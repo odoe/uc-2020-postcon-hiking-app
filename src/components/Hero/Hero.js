@@ -9,26 +9,22 @@ import {
   StyledHero,
   StyledHeroContainer,
   StyledHeroTitle,
-  StyledHeroHeadline,
+  StyledCalciteH1,
+  StyledCalciteH2,
 } from './Hero-styled';
 
 // Third-party components (buttons, icons, etc.)
-import { CalciteH1, CalciteH2 } from 'calcite-react/Elements';
-import ThreeDGlassesIcon from 'calcite-ui-icons-react/ThreeDGlassesIcon';
 
 const Hero = () => {
   return (
     <StyledHero data-testid="Hero">
+      <StyledHeroTitle>
+        <StyledCalciteH1>Discover Colorado</StyledCalciteH1>
+        <StyledCalciteH2>Plan your next outdoor adventure</StyledCalciteH2>
+      </StyledHeroTitle>
       <StyledHeroContainer>
         <WhereTo />
       </StyledHeroContainer>
-      <StyledHeroTitle>
-        <ThreeDGlassesIcon size={48} />
-        <StyledHeroHeadline>
-          <CalciteH1>Discover Colorado</CalciteH1>
-          <CalciteH2>Plan your next outdoor adventure</CalciteH2>
-        </StyledHeroHeadline>
-      </StyledHeroTitle>
     </StyledHero>
   );
 };

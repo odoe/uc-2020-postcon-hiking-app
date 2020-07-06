@@ -1,19 +1,36 @@
 // Framework and third-party non-ui
 import React from 'react';
+import { useParams } from "react-router-dom";
 
 // App components
-import Trails from 'components/Trails';
+import SubNav from 'components/SubNav';
+import Sidebar from 'components/Sidebar';
+import Map from 'components/Map';
 
 // JSON & Styles
-import { StyledPageWrapper } from 'pages/Pages-styled';
+import {
+  MapPageLayout,
+  StyledInnerWrapper,
+  StyledSidebar,
+  StyledMapContainer,
+} from './MapPage-styled';
 
 // Third-party components (buttons, icons, etc.)
 
 const MapPage = () => {
+  const { context } = useParams();
   return (
-    <StyledPageWrapper data-testid="MapPage">
-      <Trails />
-    </StyledPageWrapper>
+    <MapPageLayout data-testid="MapPage">
+      <SubNav />
+      <StyledInnerWrapper>
+        <StyledSidebar>
+          <Sidebar />
+        </StyledSidebar>
+        <StyledMapContainer>
+          <Map />
+        </StyledMapContainer>
+      </StyledInnerWrapper>
+    </MapPageLayout>
   );
 };
 

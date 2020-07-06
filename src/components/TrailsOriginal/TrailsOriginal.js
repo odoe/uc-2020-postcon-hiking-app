@@ -5,9 +5,9 @@ import useSelected from '../hooks/useSelected';
 // import useFilter from '../hooks/useFilter';
 import { initView, initWebMap } from '../data/map';
 
-import TrailCard from './TrailCard';
+import TrailCard from '../TrailCard';
 
-const Trails = () => {
+const TrailsOriginal = () => {
   const webmapid = useContext(MapContext);
   const { value } = useSelected();
   const elementRef = useRef(null);
@@ -27,7 +27,6 @@ const Trails = () => {
   useEffect(() => {
     init(webmapid);
   }, [webmapid]);
-
 
   return (
     <section className="app-container">
@@ -52,4 +51,4 @@ const Trails = () => {
   );
 };
 
-export default Trails;
+export default TrailsOriginal;

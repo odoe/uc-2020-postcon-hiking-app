@@ -18,7 +18,7 @@ import './index.css';
 
 // esri-loader
 import { setDefaultOptions } from 'esri-loader';
-setDefaultOptions({ version: 'next' });
+setDefaultOptions({ version: 'next', css: true });
 
 // App runs at the root locally, but under /{homepage} in production
 let basename;

@@ -186,6 +186,10 @@ export async function addSearch(container, view) {
   loadCss();
   const [Search, FeatureLayer] = await loadModules([
     'esri/widgets/Search',
+<<<<<<< HEAD
+=======
+    'esri/tasks/Locator',
+>>>>>>> master
     'esri/layers/FeatureLayer',
   ]);
 

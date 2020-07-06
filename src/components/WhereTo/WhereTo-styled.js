@@ -6,8 +6,7 @@ const StyledWhereTo = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: 2rem;
-  background: #ffffffc9;
+  margin: 2rem;
 `;
 
 const StyledSearchContainer = styled.div`
@@ -16,10 +15,10 @@ const StyledSearchContainer = styled.div`
 `;
 
 const StyledQuickLinksContainer = styled.div`
-  display: flex;
   padding-top: 1rem;
   width: 100%;
-  justify-content: space-evenly;
+  color: #4c4c4c;
+  text-align: start;
 
   a {
     margin: 0 0.5rem;
