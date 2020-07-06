@@ -65,9 +65,9 @@ const trailSym = {
  * Initialize the WebMap used in the application
  * @returns Promise<`esri/WebMap`>
  */
-export async function initWebMap() {
+export async function initWebMap(webmap) {
+  app.webmap = webmap;
   const [
-    WebMap,
     Bookmark,
     ElevationLayer,
     FeatureLayer,
@@ -75,7 +75,6 @@ export async function initWebMap() {
     TileLayer,
     GroupLayer,
   ] = await loadModules([
-    'esri/WebMap',
     'esri/webmap/Bookmark',
     'esri/layers/ElevationLayer',
     'esri/layers/FeatureLayer',
@@ -94,12 +93,7 @@ export async function initWebMap() {
   const bookmarksLocal =
     JSON.parse(localStorage.getItem('trail-bookmarks')) || [];
 
-  const webmap = new WebMap({
-    portalItem: {
-      id: '8744e84b32e74bffb34b0b1edf0c3d60',
-    },
-    bookmarks: bookmarksLocal.map((a) => Bookmark.fromJSON(a)),
-  });
+  webmap.bookmarks = bookmarksLocal.map((a) => Bookmark.fromJSON(a));
 
   const elevationLayer = new ElevationLayer({
     url:
@@ -128,12 +122,12 @@ export async function initWebMap() {
 
   app.elevationLayer = elevationLayer;
   app.notesLayer = notesLayer;
-  app.webmap = webmap;
 
   await webmap.load();
 
   // hiking trails
-  const hikingLayer = app.webmap.layers.getItemAt(1); // could be better
+  const hikingLayer = app.webmap.layers.getItemAt(2); // could be better
+  hikingLayer.outFields = ['*'];
   await hikingLayer.load();
 
   hikingLayer.popupTemplate.content = async ({ graphic }) => {
@@ -267,32 +261,25 @@ export async function mainSearch(container, callback) {
 
 /**
  * Initialize the MapView for the application
- * @param {HTMLElement} container
+ * @param {`esri/views/MapView`} view
  * @param {HTMLElement} searchContainer
  * @returns Promise<void>
  */
-export async function initView(container, searchContainer) {
-  loadCss();
+export async function initView(view, searchContainer) {
+  await initWebMap(view.map);
   const [
     Graphic,
-    MapView,
     BasemapToggle,
     Bookmarks,
     Directions,
     Expand,
   ] = await loadModules([
     'esri/Graphic',
-    'esri/views/MapView',
     'esri/widgets/BasemapToggle',
     'esri/widgets/Bookmarks',
     'esri/widgets/Directions',
     'esri/widgets/Expand',
   ]);
-
-  const view = new MapView({
-    map: app.webmap,
-    container,
-  });
 
   const toggle = new BasemapToggle({ view, nextBasemap: 'hybrid' });
 
@@ -335,7 +322,7 @@ export async function initView(container, searchContainer) {
       localStorage.setItem('trail-bookmarks', JSON.stringify(bookmarkStored));
     });
 
-    addSearch(searchContainer, view);
+    // addSearch(searchContainer, view);
 
     const directions = new Directions({
       routeServiceUrl:
