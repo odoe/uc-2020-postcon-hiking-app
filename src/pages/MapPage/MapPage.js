@@ -18,7 +18,6 @@ import {
 // Third-party components (buttons, icons, etc.)
 
 const MapPage = () => {
-  // eslint-disable-next-line no-unused-vars
   const { context } = useParams();
   return (
     <MapPageLayout data-testid="MapPage">

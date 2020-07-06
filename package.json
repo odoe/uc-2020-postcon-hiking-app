@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "start": "react-scripts start",
-    "build": "npm run build-storybook && react-scripts build",
+    "build": ".env.ci npm run build-storybook && react-scripts build",
     "build-storybook": "build-storybook -o ./public/components",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
