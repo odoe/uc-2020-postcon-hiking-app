@@ -1,36 +1,52 @@
 import styled from 'styled-components';
 import HeroImage from 'assets/hero-bg.jpg';
-import { CalciteH1 } from 'calcite-react/Elements';
+import { CalciteH1, CalciteH2 } from 'calcite-react/Elements';
 
 const StyledHero = styled.section`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 100vw;
-  height: 40rem;
-  background: #3C1802;
+  height: 800px;
+  width: 100%;
+  background: #3c1802;
   background-image: url(${() => HeroImage});
-  background-position: center;
+  background-position: top;
   background-repeat: no-repeat;
-  background-size: cover;
   background-attachment: fixed;
 `;
 
 const StyledCalciteH1 = styled(CalciteH1)`
   font-weight: bold;
+  color: white;
+  text-shadow: 0 0 3px #ff0000;
   font-size: 5rem;
-  color: 
+`;
+
+const StyledCalciteH2 = styled(CalciteH2)`
+  font-weight: bold;
+  color: white;
+  text-shadow: 0 0 3px #ff0000;
+  font-size: 2rem;
 `;
 
 const StyledHeroContainer = styled.div`
   display: flex;
   flex: 0 2 auto;
   flex-direction: column;
+  width: 45rem;
+  background: #ffffffef;
+  box-shadow: 0 0 8px black;
+  color: black;
 `;
 
 const StyledHeroTitle = styled.div`
   margin: 3rem auto;
-
 `;
 
-export { StyledHero, StyledCalciteH1, StyledHeroContainer, StyledHeroTitle };
+export {
+  StyledHero,
+  StyledCalciteH1,
+  StyledCalciteH2,
+  StyledHeroContainer,
+  StyledHeroTitle,
+};

@@ -9,18 +9,18 @@ import {
   StyledHero,
   StyledHeroContainer,
   StyledHeroTitle,
-  StyledCalciteH1
+  StyledCalciteH1,
+  StyledCalciteH2,
 } from './Hero-styled';
 
 // Third-party components (buttons, icons, etc.)
-import { CalciteH1, CalciteH2 } from 'calcite-react/Elements';
 
 const Hero = () => {
   return (
     <StyledHero data-testid="Hero">
       <StyledHeroTitle>
         <StyledCalciteH1>Discover Colorado</StyledCalciteH1>
-        <CalciteH2>Plan your next outdoor adventure</CalciteH2>
+        <StyledCalciteH2>Plan your next outdoor adventure</StyledCalciteH2>
       </StyledHeroTitle>
       <StyledHeroContainer>
         <WhereTo />

@@ -6,8 +6,7 @@ const StyledWhereTo = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: 2rem;
-  background: #ffffffc9;
+  margin: 2rem;
 `;
 
 const StyledSearchContainer = styled.div`
