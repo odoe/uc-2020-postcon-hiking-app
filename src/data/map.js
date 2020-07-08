@@ -126,14 +126,14 @@ export async function initWebMap(webmap) {
   await webmap.load();
 
   // hiking trails
-  const hikingLayer = app.webmap.layers.getItemAt(2); // could be better
+  const hikingLayer = app.webmap.layers.getItemAt(1); // could be better
   hikingLayer.outFields = ['*'];
   await hikingLayer.load();
 
   hikingLayer.popupTemplate.content = async ({ graphic }) => {
     const trailId = graphic.attributes.FID;
     const query = hikingLayer.createQuery();
-    query.where`TrailId = ${trailId}`;
+    query.where = `TrailId = ${trailId}`;
     const { features } = await hikingLayer
       .queryFeatures(query)
       .catch((err) => console.warn(err.message));

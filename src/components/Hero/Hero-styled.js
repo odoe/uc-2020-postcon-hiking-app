@@ -8,11 +8,11 @@ const StyledHero = styled.section`
   align-items: center;
   height: 700px;
   width: 100%;
-  background: #3c1802;
+  background: #ffffff;
   background-image: url(${() => HeroImage});
+  background-attachment: fixed;
   background-position: top;
   background-repeat: no-repeat;
-  background-attachment: fixed;
 `;
 
 const StyledHeroTitle = styled.div`
