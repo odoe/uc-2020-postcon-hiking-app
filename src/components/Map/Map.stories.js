@@ -1,5 +1,6 @@
 import React from 'react';
 import Map from '.';
+import MapContextProvider from 'contexts/MapContext';
 
 // Setup esri-loader
 import { setDefaultOptions } from 'esri-loader';
@@ -11,7 +12,9 @@ export default {
 };
 
 export const Default = () => (
-  <div style={{ height: '800px', width: '800px' }}>
-    <Map>Map</Map>
-  </div>
+  <MapContextProvider>
+    <div style={{ height: '800px', width: '800px' }}>
+      <Map>Map</Map>
+    </div>
+  </MapContextProvider>
 );

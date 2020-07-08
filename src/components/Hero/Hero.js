@@ -3,6 +3,7 @@ import React from 'react';
 
 // App components
 import WhereTo from 'components/WhereTo';
+import Login from 'components/Login';
 
 // JSON & Styles
 import {
@@ -24,6 +25,7 @@ const Hero = () => {
       </StyledHeroTitle>
       <StyledHeroContainer>
         <WhereTo />
+        <Login />
       </StyledHeroContainer>
     </StyledHero>
   );

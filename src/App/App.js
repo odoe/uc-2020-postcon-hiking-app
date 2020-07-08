@@ -1,5 +1,5 @@
 // Framework and third-party non-ui
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 
 // Hooks, context, and constants
@@ -7,6 +7,7 @@ import useSelected from 'hooks/useSelected';
 import { UserContext, SelectedContext } from 'contexts/context';
 import MapContextProvider from 'contexts/MapContext';
 import Routes from 'constants/routes';
+import { initialize } from 'data/oauth';
 
 // App pages & components
 import HomePage from 'pages/HomePage';
@@ -19,6 +20,10 @@ import { ToastContainer } from 'calcite-react/Toaster';
 const App = ({ user = {} }) => {
   const value = useSelected();
   const [userInfo] = useState(user);
+
+  useEffect(() => {
+    initialize('xlMqVpNnXme9RSQA', 'https://www.arcgis.com');
+  }, []);
 
   return (
     <UserContext.Provider value={userInfo}>

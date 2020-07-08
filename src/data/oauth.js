@@ -34,7 +34,12 @@ export const checkCurrentStatus = async () => {
   const [IdentityManager] = await loadModules([
     'esri/identity/IdentityManager',
   ]);
-  IdentityManager.checkSignInStatus(`${oauthInfo.portalUrl}/sharing`);
+  try {
+    IdentityManager.checkSignInStatus(`${oauthInfo.portalUrl}/sharing`);
+  } catch (error) {
+    console.log('not signed in');
+    throw new Error(error);
+  }
 };
 
 /**

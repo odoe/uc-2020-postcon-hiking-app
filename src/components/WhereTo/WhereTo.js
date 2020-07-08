@@ -20,18 +20,18 @@ import TrailSearch from 'components/TrailSearch';
 const WhereTo = () => {
   const getQuickLinks = () => {
     const places = [
-      {name: 'Denver', location: {}},
-      {name: 'Aspen', location: {}},
-      {name: 'Boulder', location: {}},
-      {name: 'Steamboat Springs', location: {}},
-      {name: 'Winter Park', location: {}},
+      { name: 'Denver', location: {} },
+      { name: 'Aspen', location: {} },
+      { name: 'Boulder', location: {} },
+      { name: 'Steamboat Springs', location: {} },
+      { name: 'Winter Park', location: {} },
     ];
 
     return places.map((place) => (
-      <>
-      <CalciteA key={place.name} href="#">
-        {place.name}
-      </CalciteA><>&nbsp;|&nbsp;</></>
+      <span key={place.name}>
+        <CalciteA href="#">{place.name}</CalciteA>
+        <>&nbsp;|&nbsp;</>
+      </span>
     ));
   };
 
