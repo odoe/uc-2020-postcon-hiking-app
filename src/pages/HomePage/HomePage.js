@@ -1,6 +1,6 @@
 // Framework and third-party non-ui
 import React from 'react';
-import { useParams } from "react-router-dom";
+import { useParams } from 'react-router-dom';
 
 // App components
 import Hero from 'components/Hero';
