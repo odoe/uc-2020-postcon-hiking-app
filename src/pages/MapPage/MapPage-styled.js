@@ -16,6 +16,9 @@ const ContentWrapper = styled.div`
   grid-template-columns: minmax(250px, 35%) 1fr;
   height: 100%;
   width: 100%;
+  @media (max-width: 576px) {
+    grid-template-columns: 1fr;
+  }
 `;
 
 const SidebarWrapper = styled.aside`
