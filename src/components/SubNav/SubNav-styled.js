@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-const StyledSubNav = styled.div`
+const StyledSubNav = styled.header`
   display: flex;
   width: 100%;
 

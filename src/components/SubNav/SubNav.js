@@ -4,7 +4,7 @@ import React from 'react';
 // App components
 
 // JSON & Styles
-import { StyledSubNav } from './SubNav-styled';
+import { StyledSubNav } from './SubNav-styled'; 
 import FilterContainer from 'components/FilterContainer';
 
 // Third-party components (buttons, icons, etc.)

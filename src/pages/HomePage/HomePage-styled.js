@@ -5,7 +5,6 @@ const HomePageLayout = styled.div`
   top: 0;
   left: 0;
   right: 0;
-  bottom: 0;
   background: #ffffff;
   display: flex;
   flex-direction: column;
@@ -16,12 +15,24 @@ const HomePageLayout = styled.div`
 const PopularTrailsContainer = styled.section`
   display: grid;
   grid-gap: 1rem;
-  grid-template-columns: repeat(2, 1fr);
 
-  @media only screen and (max-width: 640px) {
+  // Small devices (landscape phones, 576px and up)
+  @media (min-width: 576px) {
     grid-template-columns: 1fr;
   }
-  @media only screen and (min-width: 1024px) {
+  
+  // Medium devices (tablets, 768px and up)
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  // Large devices (desktops, 992px and up)
+  @media (min-width: 992px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  // Extra large devices (large desktops, 1200px and up)
+  @media (min-width: 1200px) {
     grid-template-columns: repeat(3, 1fr);
   }
 
