@@ -24,10 +24,10 @@ const StyledHeroTitle = styled.div`
 `;
 
 const StyledCalciteH1 = styled(CalciteH1)`
-  font-weight: bold;
+  font-family: ${({ theme }) => theme.type.accent};
   color: white;
-  text-shadow: 0 0 3px #000000;
   font-size: 5rem;
+  font-weight: bold;
   line-height: 5rem;
   @media (max-width: 575px) {
     font-size: 3rem;
@@ -37,9 +37,10 @@ const StyledCalciteH1 = styled(CalciteH1)`
 
 const StyledCalciteH2 = styled(CalciteH2)`
   font-weight: bold;
-  color: white;
-  text-shadow: 0 0 3px #000000;
-  font-size: 2rem;
+  color: ${({ theme }) => theme.palette.white};
+  text-shadow: 0 0 3px ${({ theme }) => theme.palette.themeColor};
+  font-size: 2.5rem;
+  font-family: ${({ theme }) => theme.type.accent};
   @media (max-width: 575px) {
     font-size: 1.5rem;
     line-height: 1.5rem;

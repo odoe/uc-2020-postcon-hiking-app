@@ -19,7 +19,7 @@ const ContentWrapper = styled.div`
 `;
 
 const SidebarWrapper = styled.aside`
-  background: #f2f2f2;
+  background: ${({ theme }) => theme.palette.background};
 `;
 
 const MapWrapper = styled.main``;
