@@ -8,7 +8,7 @@ const StyledHero = styled.section`
   align-items: center;
   height: 700px;
   width: 100%;
-  background: #ffffff;
+  background: ${({ theme }) => theme.palette.themeColor};
   background-image: url(${() => HeroImage});
   background-attachment: fixed;
   background-position: top;
