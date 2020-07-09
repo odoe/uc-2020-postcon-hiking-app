@@ -1,20 +1,22 @@
 import styled from 'styled-components';
+import { CalciteH1 } from 'calcite-react/Elements';
 
-const StyledSubNav = styled.header`
+const StyledHeader = styled.header`
   display: flex;
   width: 100%;
-
+  background: #515E29;
   color: rgb(255, 255, 255);
   z-index: 2;
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 0px 1px, rgba(0, 0, 0, 0.2) 0px 2px 3px;
-  display: flex;
-  -webkit-box-pack: justify;
   justify-content: space-between;
-  -webkit-box-align: center;
   align-items: center;
   line-height: normal;
   background: ${({ theme }) => theme.palette.Brand_Blue_200};
-  flex: 0 0 61px;
 `;
 
-export { StyledSubNav };
+const StyledCalciteH1 = styled(CalciteH1)`
+  margin: 1rem;
+  font-size: 2rem;
+  line-height: inherit;
+`;
+
+export { StyledHeader, StyledCalciteH1 };
