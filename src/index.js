@@ -15,6 +15,7 @@ import * as serviceWorker from './serviceWorker';
 import { homepage } from '../package.json';
 import App from './App';
 import './index.css';
+import { Theme } from "./theme";
 
 // esri-loader
 import { setDefaultOptions } from 'esri-loader';
@@ -26,7 +27,7 @@ process.env.NODE_ENV !== 'production' ? (basename = '') : (basename = homepage);
 
 ReactDOM.render(
   <React.StrictMode>
-    <CalciteThemeProvider>
+    <CalciteThemeProvider theme={Theme}>
       <BrowserRouter basename={basename}>
         <Route path="/" component={App} />
       </BrowserRouter>

@@ -1,32 +1,50 @@
 import styled from 'styled-components';
-import HeroImage from 'assets/hero-bg.jpg';
+import HeroImage from 'assets/hiking_cropped.jpg';
 import { CalciteH1, CalciteH2 } from 'calcite-react/Elements';
 
 const StyledHero = styled.section`
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 800px;
+  height: 700px;
   width: 100%;
-  background: #3c1802;
+  background: #ffffff;
   background-image: url(${() => HeroImage});
+  background-attachment: fixed;
   background-position: top;
   background-repeat: no-repeat;
-  background-attachment: fixed;
+`;
+
+const StyledHeroTitle = styled.div`
+  margin: 6rem auto 1rem;
+  text-align: center;
+  @media (max-width: 575px) {
+    margin: 3rem auto 1rem;
+  }
 `;
 
 const StyledCalciteH1 = styled(CalciteH1)`
-  font-weight: bold;
+  font-family: ${({ theme }) => theme.type.accent};
   color: white;
-  text-shadow: 0 0 3px #ff0000;
   font-size: 5rem;
+  font-weight: bold;
+  line-height: 5rem;
+  @media (max-width: 575px) {
+    font-size: 3rem;
+    line-height: 3rem;
+  }
 `;
 
 const StyledCalciteH2 = styled(CalciteH2)`
   font-weight: bold;
-  color: white;
-  text-shadow: 0 0 3px #ff0000;
-  font-size: 2rem;
+  color: ${({ theme }) => theme.palette.white};
+  text-shadow: 0 0 3px ${({ theme }) => theme.palette.themeColor};
+  font-size: 2.5rem;
+  font-family: ${({ theme }) => theme.type.accent};
+  @media (max-width: 575px) {
+    font-size: 1.5rem;
+    line-height: 1.5rem;
+  }
 `;
 
 const StyledHeroContainer = styled.div`
@@ -37,10 +55,10 @@ const StyledHeroContainer = styled.div`
   background: #ffffffef;
   box-shadow: 0 0 8px black;
   color: black;
-`;
-
-const StyledHeroTitle = styled.div`
-  margin: 3rem auto;
+  @media (max-width: 575px) {
+    margin: 0 1rem;
+    width: inherit;
+  }
 `;
 
 export {

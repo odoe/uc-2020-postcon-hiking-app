@@ -134,7 +134,7 @@ export async function initWebMap(webmap) {
   hikingLayer.popupTemplate.content = async ({ graphic }) => {
     const trailId = graphic.attributes.FID;
     const query = hikingLayer.createQuery();
-    query.where`TrailId = ${trailId}`;
+    query.where = `TrailId = ${trailId}`;
     const { features } = await hikingLayer
       .queryFeatures(query)
       .catch((err) => console.warn(err.message));

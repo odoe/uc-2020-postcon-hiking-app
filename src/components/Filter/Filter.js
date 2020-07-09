@@ -5,39 +5,38 @@ import React from 'react';
 import FilterSelect from 'components/FilterSelect';
 
 // JSON & Styles
-import { StyledFilterContainer } from './FilterContainer-styled';
+import {
+  StyledFilter,
+  StyledFormControl,
+  StyledFormControlLabel,
+} from './Filter-styled';
 
 // Third-party components (buttons, icons, etc.)
-import Search from 'calcite-react/Search';
-import { FormControl, FormControlLabel } from 'calcite-react/Form';
 
-const FilterContainer = () => {
+const Filter = () => {
   return (
-    <StyledFilterContainer data-testid="FilterContainer">
-      <FormControl noValidation>
-        <Search />
-      </FormControl>
-      <FormControl noValidation horizontal>
-        <FormControlLabel>Difficulty</FormControlLabel>
+    <StyledFilter data-testid="Filter">
+      <StyledFormControl noValidation horizontal>
+        <StyledFormControlLabel>Difficulty</StyledFormControlLabel>
         <FilterSelect options={difficultyOptions} />
-      </FormControl>
-      <FormControl noValidation horizontal>
-        <FormControlLabel>Distance</FormControlLabel>
+      </StyledFormControl>
+      <StyledFormControl noValidation horizontal>
+        <StyledFormControlLabel>Distance</StyledFormControlLabel>
         <FilterSelect options={distanceOptions} />
-      </FormControl>
-      <FormControl noValidation horizontal>
-        <FormControlLabel>Elevation Gain</FormControlLabel>
+      </StyledFormControl>
+      <StyledFormControl noValidation horizontal>
+        <StyledFormControlLabel>Elevation Gain</StyledFormControlLabel>
         <FilterSelect options={gainOptions} />
-      </FormControl>
-      <FormControl noValidation horizontal>
-        <FormControlLabel>Trail Type</FormControlLabel>
+      </StyledFormControl>
+      <StyledFormControl noValidation horizontal>
+        <StyledFormControlLabel>Trail Type</StyledFormControlLabel>
         <FilterSelect options={typeOptions} />
-      </FormControl>
-    </StyledFilterContainer>
+      </StyledFormControl>
+    </StyledFilter>
   );
 };
 
-export default FilterContainer;
+export default Filter;
 
 const difficultyOptions = [
   { value: '0', label: 'Easy' },
