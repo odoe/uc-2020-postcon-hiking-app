@@ -126,7 +126,8 @@ export async function initWebMap(webmap) {
   await webmap.load();
 
   // hiking trails
-  const hikingLayer = app.webmap.layers.getItemAt(2); // could be better
+  // const hikingLayer = app.webmap.layers.getItemAt(2); // could be better
+  const hikingLayer = app.webmap.findLayerById('17275f72a4f-layer-2');
   hikingLayer.outFields = ['*'];
   await hikingLayer.load();
 
@@ -410,7 +411,8 @@ export async function fetchMaxElevation() {
     onStatisticField: 'max_elevat',
     outStatisticFieldName: 'Max_Elevation',
   };
-  const layer = app.webmap.layers.getItemAt(1); // could be better
+  // const layer = app.webmap.layers.getItemAt(1); // could be better
+  const layer = app.webmap.findLayerById('17275f72a4f-layer-2');
 
   await layer.load();
   const query = layer.createQuery();
@@ -431,7 +433,8 @@ export async function fetchTrails(elevation, { dogs, bike, horse }) {
   const [min, max] = elevation;
   if (!app.webmap) return;
   await app.webmap.load();
-  const layer = app.webmap.layers.getItemAt(1); // could be better
+  // const layer = app.webmap.layers.getItemAt(1); // could be better
+  const layer = app.webmap.findLayerById('17275f72a4f-layer-2');
   layer.outFields = ['name', 'name_1'];
   await layer.load();
   const query = layer.createQuery();
@@ -456,6 +459,7 @@ export async function fetchTrails(elevation, { dogs, bike, horse }) {
  * @returns Promise<void>
  */
 export async function filterMapData(fids) {
+  console.log(fids);
   if (!app.webmap) return;
   const [{ whenFalseOnce }, geometryEngine] = await loadModules([
     'esri/core/watchUtils',
@@ -465,7 +469,11 @@ export async function filterMapData(fids) {
   const where = `FID in (${fids.join(',')})`;
 
   await app.webmap.load();
-  const layer = app.webmap.layers.getItemAt(1); // could be better
+  app.webmap.layers.forEach((a, idx) => {
+    console.log(idx, a.id, a.title)
+  });
+  // const layer = app.webmap.layers.getItemAt(1); // could be better
+  const layer = app.webmap.findLayerById('17275f72a4f-layer-2');
   layer.outFields = ['*'];
   await layer.load();
   await app.view.when();
@@ -497,7 +505,8 @@ export async function filterMapData(fids) {
 
   const groupLayer = app.webmap.findLayerById('group');
   const trailLayer = app.webmap.findLayerById('trail');
-  const trailHeadsLayer = app.webmap.layers.getItemAt(3); // figure out Id?
+  // const trailHeadsLayer = app.webmap.layers.getItemAt(3); // figure out Id?
+  const trailHeadsLayer = app.webmap.findLayerById('17275f72a2b-layer-0');
   trailHeadsLayer.renderer = trailheadRenderer;
 
   const geometry = geometryEngine.union(
