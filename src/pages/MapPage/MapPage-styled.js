@@ -11,20 +11,17 @@ const MapPageLayout = styled.div`
   z-index: 1;
 `;
 
-const StyledInnerWrapper = styled.div`
-  display: flex;
+const ContentWrapper = styled.div`
+  display: grid;
+  grid-template-columns: minmax(250px, 35%) 1fr;
   height: 100%;
   width: 100%;
 `;
 
-const StyledSidebar = styled.div`
-  display: flex;
-  flex: 1 1 auto;
+const SidebarWrapper = styled.aside`
+  background: #f2f2f2;
 `;
 
-const StyledMapContainer = styled.div`
-  display: flex;
-  flex: 2 2 auto;
-`;
+const MapWrapper = styled.main``;
 
-export { MapPageLayout, StyledInnerWrapper, StyledSidebar, StyledMapContainer };
+export { MapPageLayout, ContentWrapper, SidebarWrapper, MapWrapper };
