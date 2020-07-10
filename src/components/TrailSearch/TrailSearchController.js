@@ -24,6 +24,9 @@ const init = async ({ view }) => {
         minSuggestCharacters: 0,
       },
     ],
+    goToOverride: () => {
+      return null;
+    },
   });
 
   return vm;

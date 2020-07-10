@@ -1,9 +1,5 @@
 import { loadModules } from 'esri-loader';
 
-export let credential = null;
-
-let oauthInfo = null;
-
 /**
  * Register application ID and Portal URL
  * with the IdentityManager
@@ -16,26 +12,32 @@ export const initialize = async (appId, portalUrl) => {
     'esri/identity/IdentityManager',
     'esri/identity/OAuthInfo',
   ]);
-  if (!oauthInfo) {
-    oauthInfo = new OAuthInfo({
-      appId,
-      portalUrl,
-      popup: true,
-    });
-    IdentityManager.registerOAuthInfos([oauthInfo]);
-  }
+  const oauthInfo = new OAuthInfo({
+    appId,
+    portalUrl,
+    popup: true,
+  });
+  IdentityManager.registerOAuthInfos([oauthInfo]);
+  return oauthInfo;
 };
 
 /**
  * Check current logged in status for current portal
  * @returns Promise<void>
  */
-export const checkCurrentStatus = async () => {
+export const checkCurrentStatus = async (oauthInfo) => {
   const [IdentityManager] = await loadModules([
     'esri/identity/IdentityManager',
   ]);
+
   try {
-    IdentityManager.checkSignInStatus(`${oauthInfo.portalUrl}/sharing`);
+    const credential = await IdentityManager.checkSignInStatus(
+      `${oauthInfo.portalUrl}/sharing`
+    );
+
+    const user = await fetchUser(credential);
+
+    return { credential, user };
   } catch (error) {
     console.log('not signed in');
     throw new Error(error);
@@ -49,15 +51,14 @@ export const checkCurrentStatus = async () => {
  * steps to get credentials
  * @returns Promise<`esri/identity/Credential`>
  */
-export const signIn = async () => {
-  if (!credential) {
-    try {
-      credential = await checkCurrentStatus();
-    } catch (error) {
-      credential = await fetchCredentials();
-    }
+export const signIn = async (oauthInfo) => {
+  try {
+    const { credential, user } = await checkCurrentStatus(oauthInfo);
+    return { credential, user };
+  } catch (error) {
+    const { credential, user } = await fetchCredentials(oauthInfo);
+    return { credential, user };
   }
-  return credential;
 };
 
 /**
@@ -66,25 +67,26 @@ export const signIn = async () => {
  * IdentityManager, so it can destroy them properly
  * @returns Promise<void>
  */
-export const signOut = async () => {
+export const signOut = async (oauthInfo) => {
   const [IdentityManager] = await loadModules([
     'esri/identity/IdentityManager',
   ]);
   // make sure the IdentityManager has
   // the credential so it can destroy it
-  await signIn();
+  await signIn(oauthInfo);
   IdentityManager.destroyCredentials();
+  window.location.reload();
 };
 
 /**
  * Get the credentials for the provided portal
  * @returns Promise<`esri/identity/Credential`>
  */
-export const fetchCredentials = async () => {
+export const fetchCredentials = async (oauthInfo) => {
   const [IdentityManager] = await loadModules([
     'esri/identity/IdentityManager',
   ]);
-  credential = await IdentityManager.getCredential(
+  const credential = await IdentityManager.getCredential(
     `${oauthInfo.portalUrl}/sharing`,
     {
       error: null,
@@ -94,4 +96,17 @@ export const fetchCredentials = async () => {
   );
 
   return credential;
+};
+
+export const fetchUser = async (credential) => {
+  const [esriRequest] = await loadModules(['esri/request']);
+
+  try {
+    const response = await esriRequest(
+      `https://www.arcgis.com/sharing/rest/community/users/${credential.userId}?f=json`
+    );
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
 };

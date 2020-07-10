@@ -1,13 +1,14 @@
 // Framework and third-party non-ui
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 
 // Hooks, context, and constants
 import useSelected from 'hooks/useSelected';
-import { UserContext, SelectedContext } from 'contexts/context';
+import { SelectedContext } from 'contexts/context';
 import MapContextProvider from 'contexts/MapContext';
+import { UserContext } from 'contexts/UserContext';
 import Routes from 'constants/routes';
-import { initialize } from 'data/oauth';
+import { initialize, checkCurrentStatus } from 'data/oauth';
 
 // App pages & components
 import HomePage from 'pages/HomePage';
@@ -17,16 +18,32 @@ import NoMatch from 'pages/NoMatch';
 // Third-party components (buttons, icons, etc.)
 import { ToastContainer } from 'calcite-react/Toaster';
 
-const App = ({ user = {} }) => {
+const App = () => {
+  const { setOauthInfo, setUserInfo } = useContext(UserContext);
   const value = useSelected();
-  const [userInfo] = useState(user);
 
   useEffect(() => {
-    initialize('xlMqVpNnXme9RSQA', 'https://www.arcgis.com');
-  }, []);
+    const initAuth = async () => {
+      try {
+        const oauthInfo = await initialize(
+          'xlMqVpNnXme9RSQA',
+          'https://www.arcgis.com'
+        );
+        setOauthInfo(oauthInfo);
+
+        console.log('checking sign in with oauthinfo:', oauthInfo);
+        const userInfo = await checkCurrentStatus(oauthInfo);
+        console.log(userInfo);
+        if (userInfo) {
+          setUserInfo(userInfo);
+        }
+      } catch (error) {}
+    };
+    initAuth();
+  }, [setOauthInfo, setUserInfo]);
 
   return (
-    <UserContext.Provider value={userInfo}>
+    <>
       <ToastContainer />
       <Switch>
         <Route exact path={Routes.Home}>
@@ -35,7 +52,7 @@ const App = ({ user = {} }) => {
         <Route path={Routes.Map}>
           <SelectedContext.Provider value={value}>
             <MapContextProvider>
-              <HomePage user={user} />
+              <HomePage />
               <MapPage />
             </MapContextProvider>
           </SelectedContext.Provider>
@@ -44,7 +61,7 @@ const App = ({ user = {} }) => {
           <NoMatch />
         </Route>
       </Switch>
-    </UserContext.Provider>
+    </>
   );
 };
 
