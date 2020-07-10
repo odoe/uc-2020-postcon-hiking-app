@@ -1,43 +1,40 @@
 // Framework and third-party non-ui
 import React from 'react';
-import { NavLink } from 'react-router-dom';
 
-// Hooks, context, and constants
-import Routes from 'constants/routes';
+// App components
+import Search from 'calcite-react/Search';
+import Breakpoint from 'App/Breakpoint';
 
-// App pages & components
-import LoginLink from './LoginLink';
-import AccountMenu from './AccountMenu';
+import LayerBasemapIcon from 'calcite-ui-icons-react/LayerBasemapIcon';
 
 // JSON & Styles
-import Logo from 'assets/logo.svg';
+import {
+  StyledHeader,
+  StyledCalciteH1,
+  SearchWrapper,
+  UserWrapper,
+} from './Header-styled';
 
 // Third-party components (buttons, icons, etc.)
-import TopNav, {
-  TopNavBrand,
-  TopNavTitle,
-  TopNavList,
-  TopNavLink,
-  TopNavActionsList,
-} from 'calcite-react/TopNav';
 
-const App = ({ user = {} }) => {
+const Header = () => {
   return (
-    <TopNav>
-      <TopNavBrand as={NavLink} to={Routes.Home} src={Logo} />
-      <TopNavTitle as={NavLink} to={Routes.Home}>
-        Discover Colorado
-      </TopNavTitle>
-      <TopNavList>
-        <TopNavLink as={NavLink} to={Routes.Map}>
-          Map
-        </TopNavLink>
-      </TopNavList>
-      <TopNavActionsList>
-        {user.username ? <AccountMenu user={user} /> : <LoginLink />}
-      </TopNavActionsList>
-    </TopNav>
+    <StyledHeader data-testid="Header">
+      <SearchWrapper>
+        <Search />
+      </SearchWrapper>
+      <StyledCalciteH1>
+        <Breakpoint name="desktop">Discover Colorado</Breakpoint>
+      </StyledCalciteH1>
+      <UserWrapper>
+        <Breakpoint name="phone">
+          <LayerBasemapIcon size={32} />
+          BB
+        </Breakpoint>
+        <Breakpoint name="notPhone">Bill Bryson</Breakpoint>
+      </UserWrapper>
+    </StyledHeader>
   );
 };
 
-export default App;
+export default Header;

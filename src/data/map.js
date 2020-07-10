@@ -1,8 +1,12 @@
-import { loadModules, loadCss } from 'esri-loader';
+import { loadModules } from 'esri-loader';
 import { calculateAltitudeGainLoss } from '../utils/utils.js';
 
 // Object to handle module level variables
 const app = {};
+
+// Layer id for trails
+const TRAIL_ID = '17275f72a4f-layer-2';
+const TRAILHEAD_ID = '17275f72a2b-layer-0';
 
 // Symbol Markers for Trail Heads
 const trailheadRenderer = {
@@ -126,7 +130,8 @@ export async function initWebMap(webmap) {
   await webmap.load();
 
   // hiking trails
-  const hikingLayer = app.webmap.layers.getItemAt(1); // could be better
+  // const hikingLayer = app.webmap.layers.getItemAt(2); // could be better
+  const hikingLayer = app.webmap.findLayerById(TRAIL_ID);
   hikingLayer.outFields = ['*'];
   await hikingLayer.load();
 
@@ -157,7 +162,7 @@ export async function initWebMap(webmap) {
     }
   };
   // TrailHeads layer
-  const layer = webmap.findLayerById('17275f72a2b-layer-0');
+  const layer = webmap.findLayerById(TRAILHEAD_ID);
   await layer.load();
 
   layer.popupTemplate.actions = layer.popupTemplate.actions || [];
@@ -171,92 +176,29 @@ export async function initWebMap(webmap) {
   return webmap;
 }
 
+// Fields
+// https://jsapi.maps.arcgis.com/home/item.html?id=546747d854204d3ba068125f03910da9&sublayer=2&view=table&sortOrder=true&sortField=defaultFSOrder#data
 /**
- * Creates and Search widget
- * @param {HTMLElement} container
- * @param {MapView} view
- * @returns Promise<`esri/widgets/Search`>
+ * Takes an object with filters to apply to layer
+ * @param {*} filter 
  */
-export async function addSearch(container, view) {
-  loadCss();
-  const [Search, FeatureLayer] = await loadModules([
-    'esri/widgets/Search',
-    'esri/tasks/Locator',
-    'esri/layers/FeatureLayer',
-  ]);
-
-  return new Search({
-    view,
-    includeDefaultSources: false,
-    sources: [
-      {
-        // locator: new Locator({
-        //   url:
-        //     'https://utility.arcgis.com/usrsvcs/servers/b34c620191be4b6f9c25576a9758bfdb/rest/services/World/GeocodeServer',
-        // }),
-        layer: new FeatureLayer({
-          url:
-            'https://services.arcgis.com/V6ZHFr6zdgNZuVG0/ArcGIS/rest/services/CPW_Trails/FeatureServer/2',
-        }),
-        searchFields: ['name'],
-        displayField: 'name',
-        exactMatch: false,
-        outFields: ['*'],
-        name: 'Colorado Trail Search',
-        placeholder: 'Search Colorado Trails',
-        maxResults: 3,
-        maxSuggestions: 6,
-        minSuggestCharacters: 0,
-        // singleLineFieldName: 'SingleLine',
-        // name: 'Colorado Search',
-        // placeholder: 'Search Colorado',
-        // maxResults: 3,
-        // maxSuggestions: 6,
-        // minSuggestCharacters: 0,
-      },
-    ],
-    container,
-  });
-}
-
-export async function mainSearch(container, callback) {
-  console.log('mainSearch', container, callback);
-  loadCss();
-  const [Search, FeatureLayer] = await loadModules([
-    'esri/widgets/Search',
-    'esri/layers/FeatureLayer',
-  ]);
-
-  const search = new Search({
-    includeDefaultSources: false,
-    sources: [
-      {
-        layer: new FeatureLayer({
-          url:
-            'https://services.arcgis.com/V6ZHFr6zdgNZuVG0/ArcGIS/rest/services/CPW_Trails/FeatureServer/2',
-        }),
-        searchFields: ['name'],
-        displayField: 'name',
-        exactMatch: false,
-        outFields: ['*'],
-        name: 'Colorado Trail Search',
-        placeholder: 'Search Colorado Trails',
-        maxResults: 3,
-        maxSuggestions: 6,
-        minSuggestCharacters: 0,
-      },
-    ],
-    container,
+export function applyFilter(filter) {
+  /**
+   * {
+   *   type: String,
+   *   surface: String,
+   * }
+   */
+  let clause = ``;
+  Object.keys(filter).forEach((key) => {
+    clause += `${key} in ('${filter[key]}')`;
   });
 
-  search.on('search-complete', ({ results }) => {
-    console.log('search event', results, callback);
-    if (callback && typeof callback === 'function') {
-      callback(results);
-    }
-  });
-
-  return search;
+  if (!clause.length) {
+    return;
+  }
+  const hikingLayer = app.webmap.findLayerById(TRAIL_ID);
+  hikingLayer.definitionExpression = clause;
 }
 
 /**
@@ -410,7 +352,8 @@ export async function fetchMaxElevation() {
     onStatisticField: 'max_elevat',
     outStatisticFieldName: 'Max_Elevation',
   };
-  const layer = app.webmap.layers.getItemAt(1); // could be better
+  // const layer = app.webmap.layers.getItemAt(1); // could be better
+  const layer = app.webmap.findLayerById(TRAIL_ID);
 
   await layer.load();
   const query = layer.createQuery();
@@ -431,7 +374,8 @@ export async function fetchTrails(elevation, { dogs, bike, horse }) {
   const [min, max] = elevation;
   if (!app.webmap) return;
   await app.webmap.load();
-  const layer = app.webmap.layers.getItemAt(1); // could be better
+  // const layer = app.webmap.layers.getItemAt(1); // could be better
+  const layer = app.webmap.findLayerById(TRAIL_ID);
   layer.outFields = ['name', 'name_1'];
   await layer.load();
   const query = layer.createQuery();
@@ -456,6 +400,7 @@ export async function fetchTrails(elevation, { dogs, bike, horse }) {
  * @returns Promise<void>
  */
 export async function filterMapData(fids) {
+  console.log(fids);
   if (!app.webmap) return;
   const [{ whenFalseOnce }, geometryEngine] = await loadModules([
     'esri/core/watchUtils',
@@ -465,7 +410,8 @@ export async function filterMapData(fids) {
   const where = `FID in (${fids.join(',')})`;
 
   await app.webmap.load();
-  const layer = app.webmap.layers.getItemAt(1); // could be better
+  // const layer = app.webmap.layers.getItemAt(1); // could be better
+  const layer = app.webmap.findLayerById(TRAIL_ID);
   layer.outFields = ['*'];
   await layer.load();
   await app.view.when();
@@ -497,7 +443,8 @@ export async function filterMapData(fids) {
 
   const groupLayer = app.webmap.findLayerById('group');
   const trailLayer = app.webmap.findLayerById('trail');
-  const trailHeadsLayer = app.webmap.layers.getItemAt(3); // figure out Id?
+  // const trailHeadsLayer = app.webmap.layers.getItemAt(3); // figure out Id?
+  const trailHeadsLayer = app.webmap.findLayerById(TRAILHEAD_ID);
   trailHeadsLayer.renderer = trailheadRenderer;
 
   const geometry = geometryEngine.union(

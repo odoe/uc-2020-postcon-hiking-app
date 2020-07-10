@@ -9,10 +9,11 @@ import {
   StyledSearchContainer,
   StyledQuickLinksContainer,
   StyledFormControl,
+  StyledCalciteH2,
 } from './WhereTo-styled';
 
 // Third-party components (buttons, icons, etc.)
-import { CalciteH2, CalciteA } from 'calcite-react/Elements';
+import { CalciteA } from 'calcite-react/Elements';
 import Button from 'calcite-react/Button';
 import GpsOnIcon from 'calcite-ui-icons-react/GpsOnIcon';
 import TrailSearch from 'components/TrailSearch';
@@ -37,7 +38,7 @@ const WhereTo = () => {
 
   return (
     <StyledWhereTo data-testid="WhereTo">
-      <CalciteH2>Where to?</CalciteH2>
+      <StyledCalciteH2>Where to?</StyledCalciteH2>
       <StyledSearchContainer>
         <StyledFormControl horizontal noValidation>
           <TrailSearch fullWidth />

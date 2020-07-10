@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-const MapPageLayout = styled.section`
+const MapPageLayout = styled.div`
   position: absolute;
   top: 0;
   left: 0;
@@ -11,20 +11,20 @@ const MapPageLayout = styled.section`
   z-index: 1;
 `;
 
-const StyledInnerWrapper = styled.div`
-  display: flex;
+const ContentWrapper = styled.div`
+  display: grid;
+  grid-template-columns: minmax(250px, 35%) 1fr;
   height: 100%;
   width: 100%;
+  @media (max-width: 576px) {
+    grid-template-columns: 1fr;
+  }
 `;
 
-const StyledSidebar = styled.div`
-  display: flex;
-  flex: 1 1 auto;
+const SidebarWrapper = styled.aside`
+  background: ${({ theme }) => theme.palette.background};
 `;
 
-const StyledMapContainer = styled.div`
-  display: flex;
-  flex: 2 2 auto;
-`;
+const MapWrapper = styled.main``;
 
-export { MapPageLayout, StyledInnerWrapper, StyledSidebar, StyledMapContainer };
+export { MapPageLayout, ContentWrapper, SidebarWrapper, MapWrapper };
