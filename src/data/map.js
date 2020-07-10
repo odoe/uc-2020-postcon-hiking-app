@@ -1,4 +1,4 @@
-import { loadModules, loadCss } from 'esri-loader';
+import { loadModules } from 'esri-loader';
 import { calculateAltitudeGainLoss } from '../utils/utils.js';
 
 // Object to handle module level variables
