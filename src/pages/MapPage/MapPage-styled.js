@@ -13,7 +13,7 @@ const MapPageLayout = styled.div`
 
 const ContentWrapper = styled.div`
   display: grid;
-  grid-template-columns: minmax(250px, 35%) 1fr;
+  grid-template-columns: minmax(320px, 35%) 1fr;
   height: 100%;
   width: 100%;
   @media (max-width: 576px) {
