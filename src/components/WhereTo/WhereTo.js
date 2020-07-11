@@ -29,12 +29,10 @@ const WhereTo = () => {
     ];
 
     return places.map((place) => (
-      <>
-        <CalciteA key={place.name} href="#">
-          {place.name}
-        </CalciteA>
+      <span key={place.name}>
+        <CalciteA href="#">{place.name}</CalciteA>
         <>&nbsp;|&nbsp;</>
-      </>
+      </span>
     ));
   };
 

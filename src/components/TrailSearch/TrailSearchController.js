@@ -24,6 +24,10 @@ const init = async ({ view }) => {
         minSuggestCharacters: 0,
       },
     ],
+    goToOverride: () => {
+      // Don't call view.goTo()
+      return null;
+    },
   });
 
   return vm;
@@ -60,7 +64,6 @@ const suggest = async ({ vm, value }) => {
 
 const search = async ({ vm, value }) => {
   const searchResponse = await vm.search(value);
-  console.log(searchResponse);
   return searchResponse;
 };
 

@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import Card, { CardTitle, CardContent, CardImage } from 'calcite-react/Card';
+import Card, { CardTitle, CardContent } from 'calcite-react/Card';
 
 const StyledCard = styled(Card)`
   &:hover {

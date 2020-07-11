@@ -14,8 +14,9 @@ import * as serviceWorker from './serviceWorker';
 // App-specific
 import { homepage } from '../package.json';
 import App from './App';
+import UserContextProvider from 'contexts/UserContext';
 import './index.css';
-import { Theme } from "./theme";
+import { Theme } from './theme';
 
 // esri-loader
 import { setDefaultOptions } from 'esri-loader';
@@ -29,7 +30,9 @@ ReactDOM.render(
   <React.StrictMode>
     <CalciteThemeProvider theme={Theme}>
       <BrowserRouter basename={basename}>
-        <Route path="/" component={App} />
+        <UserContextProvider>
+          <Route path="/" component={App} />
+        </UserContextProvider>
       </BrowserRouter>
     </CalciteThemeProvider>
   </React.StrictMode>,

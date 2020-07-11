@@ -15,6 +15,14 @@ const StyledHero = styled.section`
   background-repeat: no-repeat;
 `;
 
+const StyledUser = styled.div`
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  width: 500px;
+  text-align: right;
+`;
+
 const StyledHeroTitle = styled.div`
   margin: 6rem auto 1rem;
   text-align: center;
@@ -61,10 +69,17 @@ const StyledHeroContainer = styled.div`
   }
 `;
 
+const StyledLoginContainer = styled.div`
+  display: flex;
+  margin-top: 2rem;
+`;
+
 export {
   StyledHero,
+  StyledUser,
   StyledCalciteH1,
   StyledCalciteH2,
   StyledHeroContainer,
+  StyledLoginContainer,
   StyledHeroTitle,
 };
