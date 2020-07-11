@@ -25,19 +25,25 @@ const App = () => {
   useEffect(() => {
     const initAuth = async () => {
       try {
+        // Initialize the Identity Manager
         const oauthInfo = await initialize(
           'xlMqVpNnXme9RSQA',
           'https://www.arcgis.com'
         );
+
+        // Add oauthInfo to UserContext
         setOauthInfo(oauthInfo);
 
-        console.log('checking sign in with oauthinfo:', oauthInfo);
+        // Check to see if a user is already signed in
         const userInfo = await checkCurrentStatus(oauthInfo);
-        console.log(userInfo);
+        setUserInfo(userInfo);
         if (userInfo) {
-          setUserInfo(userInfo);
+          // If user is signed in, add userInfo to UserContext
         }
-      } catch (error) {}
+      } catch (error) {
+        // User is not logged in, set userInfo to undefined
+        setUserInfo(undefined);
+      }
     };
     initAuth();
   }, [setOauthInfo, setUserInfo]);

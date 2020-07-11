@@ -11,9 +11,9 @@ import TrailCard from 'components/TrailCard';
 import { VariableSizeList as List } from 'react-window';
 import AutoSizer from 'react-virtualized-auto-sizer';
 
-const rowHeights = new Array(1000)
-  .fill(true)
-  .map(() => 25 + Math.round(Math.random() * 50));
+// const rowHeights = new Array(1000)
+//   .fill(true)
+//   .map(() => 25 + Math.round(Math.random() * 50));
 
 const getItemSize = (index) => 125; //rowHeights[index];
 

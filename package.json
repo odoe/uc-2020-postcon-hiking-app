@@ -28,7 +28,8 @@
     "react-scripts": "3.4.1",
     "react-virtualized-auto-sizer": "^1.0.2",
     "react-window": "^1.8.5",
-    "styled-components": "^5.1.1"
+    "styled-components": "^5.1.1",
+    "use-debounce": "^3.4.3"
   },
   "devDependencies": {
     "@storybook/addon-actions": "^5.3.19",

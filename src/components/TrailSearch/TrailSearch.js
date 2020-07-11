@@ -1,6 +1,7 @@
 // Framework and third-party non-ui
 import React, { useContext, useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
+import { useDebounce } from 'use-debounce';
 
 // App components
 import { MapContext } from 'contexts/MapContext';
@@ -23,6 +24,7 @@ const TrailSearch = ({ ...rest }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [results, setResults] = useState([]);
   const history = useHistory();
+  const [debouncedSearchTerm] = useDebounce(searchTerm, 500);
 
   // When the mapView is loaded from context, create a SearchViewModel
   useEffect(() => {
@@ -38,13 +40,13 @@ const TrailSearch = ({ ...rest }) => {
   // When the search term changes, ask the view model for suggestions
   useEffect(() => {
     async function getSuggestions() {
-      const suggestions = await suggest({ vm, value: searchTerm });
+      const suggestions = await suggest({ vm, value: debouncedSearchTerm });
       setResults(suggestions);
     }
-    if (vm && searchTerm) {
+    if (vm && debouncedSearchTerm) {
       getSuggestions();
     }
-  }, [vm, searchTerm]);
+  }, [vm, debouncedSearchTerm]);
 
   // Clear both the search term and results
   const clearSearch = () => {
@@ -66,8 +68,7 @@ const TrailSearch = ({ ...rest }) => {
   };
 
   // Handle Search's user actions
-  const onUserAction = (inputValue, selectedItemVal) => {
-    console.log('onUserAction', inputValue);
+  const onUserAction = (inputValue) => {
     if (!inputValue) {
       return clearSearch();
     }
@@ -80,7 +81,6 @@ const TrailSearch = ({ ...rest }) => {
   };
 
   const onChange = async ({ value }) => {
-    console.log('onChange', value);
     const result = await search({ vm, value });
     console.log(result);
     history.push('/details');

@@ -39,7 +39,6 @@ export const checkCurrentStatus = async (oauthInfo) => {
 
     return { credential, user };
   } catch (error) {
-    console.log('not signed in');
     throw new Error(error);
   }
 };
@@ -71,9 +70,7 @@ export const signOut = async (oauthInfo) => {
   const [IdentityManager] = await loadModules([
     'esri/identity/IdentityManager',
   ]);
-  // make sure the IdentityManager has
-  // the credential so it can destroy it
-  await signIn(oauthInfo);
+
   IdentityManager.destroyCredentials();
   window.location.reload();
 };
@@ -86,6 +83,7 @@ export const fetchCredentials = async (oauthInfo) => {
   const [IdentityManager] = await loadModules([
     'esri/identity/IdentityManager',
   ]);
+
   const credential = await IdentityManager.getCredential(
     `${oauthInfo.portalUrl}/sharing`,
     {
@@ -95,7 +93,9 @@ export const fetchCredentials = async (oauthInfo) => {
     }
   );
 
-  return credential;
+  const user = await fetchUser(credential);
+
+  return { credential, user };
 };
 
 export const fetchUser = async (credential) => {

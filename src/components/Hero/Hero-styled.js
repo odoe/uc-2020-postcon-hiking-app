@@ -69,11 +69,17 @@ const StyledHeroContainer = styled.div`
   }
 `;
 
+const StyledLoginContainer = styled.div`
+  display: flex;
+  margin-top: 2rem;
+`;
+
 export {
   StyledHero,
   StyledUser,
   StyledCalciteH1,
   StyledCalciteH2,
   StyledHeroContainer,
+  StyledLoginContainer,
   StyledHeroTitle,
 };

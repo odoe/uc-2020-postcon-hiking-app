@@ -25,6 +25,7 @@ const init = async ({ view }) => {
       },
     ],
     goToOverride: () => {
+      // Don't call view.goTo()
       return null;
     },
   });
@@ -63,7 +64,6 @@ const suggest = async ({ vm, value }) => {
 
 const search = async ({ vm, value }) => {
   const searchResponse = await vm.search(value);
-  console.log(searchResponse);
   return searchResponse;
 };
 

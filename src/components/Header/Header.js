@@ -1,11 +1,10 @@
 // Framework and third-party non-ui
-import React from 'react';
+import React, { useContext } from 'react';
 
 // App components
-import Search from 'calcite-react/Search';
+import User from 'components/User';
+import { UserContext } from 'contexts/UserContext';
 import Breakpoint from 'App/Breakpoint';
-
-import LayerBasemapIcon from 'calcite-ui-icons-react/LayerBasemapIcon';
 
 // JSON & Styles
 import {
@@ -16,8 +15,12 @@ import {
 } from './Header-styled';
 
 // Third-party components (buttons, icons, etc.)
+import Search from 'calcite-react/Search';
+import LayerBasemapIcon from 'calcite-ui-icons-react/LayerBasemapIcon';
 
 const Header = () => {
+  const { ready, userInfo } = useContext(UserContext);
+
   return (
     <StyledHeader data-testid="Header">
       <SearchWrapper>
@@ -29,9 +32,8 @@ const Header = () => {
       <UserWrapper>
         <Breakpoint name="phone">
           <LayerBasemapIcon size={32} />
-          BB
         </Breakpoint>
-        <Breakpoint name="notPhone">Bill Bryson</Breakpoint>
+        {ready ? <User userInfo={userInfo} /> : null}
       </UserWrapper>
     </StyledHeader>
   );

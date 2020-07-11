@@ -10,8 +10,8 @@ import { StyledLoginButton } from './Login-styled';
 
 // Third-party components (buttons, icons, etc.)
 
-const Login = () => {
-  const { userInfo, setUserInfo, oauthInfo } = useContext(UserContext);
+const Login = ({ ...rest }) => {
+  const { setUserInfo, oauthInfo } = useContext(UserContext);
 
   const attemptLogin = async () => {
     try {
@@ -20,15 +20,11 @@ const Login = () => {
     } catch (error) {}
   };
 
-  if (!userInfo) {
-    return (
-      <StyledLoginButton data-testid="Login" onClick={attemptLogin}>
-        Login
-      </StyledLoginButton>
-    );
-  }
-
-  return null;
+  return (
+    <StyledLoginButton data-testid="Login" onClick={attemptLogin} {...rest}>
+      Login
+    </StyledLoginButton>
+  );
 };
 
 export default Login;
