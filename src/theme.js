@@ -19,7 +19,9 @@ export const Theme = {
     semantic: {
       difficult: '#17231E',
       moderate: '#5C649C',
-      easy: '#F0BE5A',
+      easy: '#798146',
+      active: '#515E29',
+      inactive: '#8B918F',
     },
   },
   type: {
