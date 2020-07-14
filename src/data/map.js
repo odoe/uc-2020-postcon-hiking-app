@@ -78,7 +78,7 @@ export async function initWebMap(webmap) {
     GraphicsLayer,
     TileLayer,
     GroupLayer,
-    watchUtils
+    watchUtils,
   ] = await loadModules([
     'esri/webmap/Bookmark',
     'esri/layers/ElevationLayer',
@@ -86,7 +86,7 @@ export async function initWebMap(webmap) {
     'esri/layers/GraphicsLayer',
     'esri/layers/TileLayer',
     'esri/layers/GroupLayer',
-    'esri/core/watchUtils'    
+    'esri/core/watchUtils',
   ]);
 
   const notesLayer = new FeatureLayer({
@@ -107,7 +107,7 @@ export async function initWebMap(webmap) {
   });
 
   elevationLayer.load();
-  await watchUtils.whenEqualOnce(elevationLayer, "loadStatus", "loaded");    
+  await watchUtils.whenEqualOnce(elevationLayer, 'loadStatus', 'loaded');
   await notesLayer.load();
 
   const trailLayer = new GraphicsLayer({ id: 'trail' });
@@ -130,7 +130,7 @@ export async function initWebMap(webmap) {
   app.elevationLayer = elevationLayer;
   app.notesLayer = notesLayer;
   webmap.load();
-  await watchUtils.whenEqualOnce(webmap, "loadStatus", "loaded");    
+  await watchUtils.whenEqualOnce(webmap, 'loadStatus', 'loaded');
 
   // hiking trails
   // const hikingLayer = app.webmap.layers.getItemAt(2); // could be better
@@ -138,7 +138,7 @@ export async function initWebMap(webmap) {
   hikingLayer.outFields = ['*'];
   // hikingLayer.visible = false;
   hikingLayer.load();
-  await watchUtils.whenEqualOnce(hikingLayer, "loadStatus", "loaded");  
+  await watchUtils.whenEqualOnce(hikingLayer, 'loadStatus', 'loaded');
 
   hikingLayer.popupTemplate.content = async ({ graphic }) => {
     const trailId = graphic.attributes.FID;
