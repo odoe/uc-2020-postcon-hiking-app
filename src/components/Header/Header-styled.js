@@ -15,7 +15,7 @@ const StyledHeader = styled.header`
 `;
 
 const StyledCalciteH1 = styled(CalciteH1)`
-  font-family: ${({ theme }) => theme.type.accent};
+  font-family: ${({ theme }) => theme.type.accentFamily};
   color: ${({ theme }) => theme.palette.white};
   font-size: 2rem;
   line-height: inherit;

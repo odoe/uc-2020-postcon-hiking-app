@@ -10,6 +10,7 @@ const StyledCard = styled(Card)`
 
 const StyledCardTitle = styled(CardTitle)`
   font-size: 1.2rem;
+  margin: 0 0 0.35rem 0;
 `;
 
 const StyledCardContent = styled(CardContent)`

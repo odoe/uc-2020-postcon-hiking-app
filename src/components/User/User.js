@@ -57,7 +57,7 @@ const User = ({ userInfo }) => {
         onRequestClose={() => setMenuOpen(false)}
         targetEl={getAvatar({
           userInfo,
-          size: 30,
+          size: 36,
           onClick: () => setMenuOpen(true),
           style: {
             cursor: 'pointer',

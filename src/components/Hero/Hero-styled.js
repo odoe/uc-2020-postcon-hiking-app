@@ -7,12 +7,13 @@ const StyledHero = styled.section`
   flex-direction: column;
   align-items: center;
   height: 700px;
+  min-height: 700px;
   width: 100%;
   background: ${({ theme }) => theme.palette.themeColor};
   background-image: url(${() => HeroImage});
   background-attachment: fixed;
   background-position: top;
-  background-repeat: no-repeat;
+  background-repeat: repeat-x;
 `;
 
 const StyledUser = styled.div`
@@ -32,7 +33,7 @@ const StyledHeroTitle = styled.div`
 `;
 
 const StyledCalciteH1 = styled(CalciteH1)`
-  font-family: ${({ theme }) => theme.type.accent};
+  font-family: ${({ theme }) => theme.type.accentFamily};
   color: white;
   font-size: 5rem;
   font-weight: bold;
@@ -48,7 +49,7 @@ const StyledCalciteH2 = styled(CalciteH2)`
   color: ${({ theme }) => theme.palette.white};
   text-shadow: 0 0 3px ${({ theme }) => theme.palette.themeColor};
   font-size: 2.5rem;
-  font-family: ${({ theme }) => theme.type.accent};
+  font-family: ${({ theme }) => theme.type.accentFamily};
   @media (max-width: 575px) {
     font-size: 1.5rem;
     line-height: 1.5rem;
@@ -69,17 +70,11 @@ const StyledHeroContainer = styled.div`
   }
 `;
 
-const StyledLoginContainer = styled.div`
-  display: flex;
-  margin-top: 2rem;
-`;
-
 export {
   StyledHero,
   StyledUser,
   StyledCalciteH1,
   StyledCalciteH2,
   StyledHeroContainer,
-  StyledLoginContainer,
   StyledHeroTitle,
 };

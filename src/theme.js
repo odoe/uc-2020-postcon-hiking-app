@@ -4,6 +4,8 @@ import { unitCalc } from 'calcite-react/utils/helpers';
 const themeColor = '#515E29';
 const themeColorHighlight = '#798146';
 const backgroundColor = '#515E290d';
+const primaryFont =
+  '"Avenir Next W01", "Avenir Next W00", "Avenir Next", "Avenir", "Helvetica Neue", sans-serif';
 const accentFont = '"Courgette", cursive';
 
 export const Theme = {
@@ -26,7 +28,8 @@ export const Theme = {
   },
   type: {
     ...CalciteTheme.type,
-    accent: accentFont,
+    avenirFamily: primaryFont,
+    accentFamily: accentFont,
   },
   panelMargin: unitCalc(CalciteTheme.baseline, 2, '/'),
   panelPadding: unitCalc(CalciteTheme.baseline, 2, '/'),

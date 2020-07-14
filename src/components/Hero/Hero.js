@@ -11,7 +11,6 @@ import {
   StyledHero,
   StyledUser,
   StyledHeroContainer,
-  StyledLoginContainer,
   StyledHeroTitle,
   StyledCalciteH1,
   StyledCalciteH2,
@@ -26,7 +25,11 @@ const Hero = () => {
   return (
     <StyledHero data-testid="Hero">
       <StyledUser>
-        {ready && userInfo ? <User userInfo={userInfo} /> : null}
+        {ready && userInfo ? (
+          <User userInfo={userInfo} />
+        ) : (
+          <Login extraLarge />
+        )}
       </StyledUser>
       <StyledHeroTitle>
         <StyledCalciteH1>Discover Colorado</StyledCalciteH1>
@@ -35,9 +38,6 @@ const Hero = () => {
       <StyledHeroContainer>
         <WhereTo />
       </StyledHeroContainer>
-      <StyledLoginContainer>
-        {!ready || userInfo ? null : <Login extraLarge />}
-      </StyledLoginContainer>
     </StyledHero>
   );
 };
