@@ -258,7 +258,7 @@ export async function initView(view) {
     title: 'Elevation',
   });
 
-  app.view.when(async () => {
+  app.view.when(() => {
     // set up bookmarks
     bookmarks.bookmarks.on('change', ({ added }) => {
       // Save bookmarks to local storage
