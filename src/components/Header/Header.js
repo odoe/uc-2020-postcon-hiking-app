@@ -3,6 +3,7 @@ import React, { useContext } from 'react';
 
 // App components
 import User from 'components/User';
+import TrailSearch from 'components/TrailSearch';
 import { UserContext } from 'contexts/UserContext';
 import Breakpoint from 'App/Breakpoint';
 
@@ -15,7 +16,6 @@ import {
 } from './Header-styled';
 
 // Third-party components (buttons, icons, etc.)
-import Search from 'calcite-react/Search';
 import LayerBasemapIcon from 'calcite-ui-icons-react/LayerBasemapIcon';
 
 const Header = () => {
@@ -24,7 +24,7 @@ const Header = () => {
   return (
     <StyledHeader data-testid="Header">
       <SearchWrapper>
-        <Search />
+        <TrailSearch />
       </SearchWrapper>
       <StyledCalciteH1>
         <Breakpoint name="desktop">Discover Colorado</Breakpoint>

@@ -4,8 +4,9 @@ import { useHistory } from 'react-router-dom';
 import { useDebounce } from 'use-debounce';
 
 // App components
-import { MapContext } from 'contexts/MapContext';
 import { init, suggest, search } from './TrailSearchController';
+import { MapContext } from 'contexts/MapContext';
+import { getTrailFeature } from 'data/map';
 
 // JSON & Styles
 import { StyledTrailSearch } from './TrailSearch-styled';
@@ -19,7 +20,7 @@ import CarIcon from 'calcite-ui-icons-react/CarIcon';
 import PinIcon from 'calcite-ui-icons-react/PinIcon';
 
 const TrailSearch = ({ ...rest }) => {
-  const { mapView } = useContext(MapContext);
+  const { mapView, setSelection } = useContext(MapContext);
   const [vm, setVm] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [results, setResults] = useState([]);
@@ -81,14 +82,24 @@ const TrailSearch = ({ ...rest }) => {
   };
 
   const onChange = async ({ value }) => {
+    // Call the SearchViewModel's search method
     const result = await search({ vm, value });
-    console.log(result);
+
+    // Get the FID from the search result
+    const fid = result.results[0].results[0].feature.attributes['FID'];
+
+    // Get the full feature object from the layer
+    const feature = await getTrailFeature(fid);
+
+    // Set the selected feature in MapContext
+    setSelection(feature);
+
+    // Update the route
     history.push('/details');
   };
 
   return (
     <StyledTrailSearch data-testid="TrailSearch">
-      {/* TODO: How can we load the search before the mapView is ready...? */}
       <Search
         placeholder={vm ? 'Search...' : 'Loading...'}
         inputValue={searchTerm}

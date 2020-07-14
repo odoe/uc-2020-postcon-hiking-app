@@ -33,7 +33,9 @@ const getLabel = (difficultyLevel) => {
 const Chip = (props) => {
   const difficultyLevel = difficulty[props.difficulty] || difficulty.unknown;
   return difficultyLevel !== difficulty.unknown ? (
-    <StyledChip difficulty={props.difficulty} data-testid="Chip">{getLabel(difficultyLevel)}</StyledChip>
+    <StyledChip difficulty={props.difficulty} data-testid="Chip">
+      {getLabel(difficultyLevel)}
+    </StyledChip>
   ) : null;
 };
 

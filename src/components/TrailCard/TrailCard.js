@@ -2,7 +2,9 @@
 import React from 'react';
 
 // App components
-import Chip from 'components/Chip';
+import TrailDifficulty from './common/TrailDifficulty';
+import { getRandomImage } from 'data/images';
+import { getSlope } from 'utils/utils';
 
 // JSON & Styles
 import {
@@ -18,57 +20,9 @@ import {
 
 // Third-party components (buttons, icons, etc.)
 import { CardImage } from 'calcite-react/Card';
-import { Biking, Dog, Hiking, Horse, Road, Vehicle } from 'icons/icons';
-import image01 from 'assets/thumbnails/image01.jpg';
-import image02 from 'assets/thumbnails/image02.jpg';
-import image03 from 'assets/thumbnails/image03.jpg';
-import image04 from 'assets/thumbnails/image04.jpg';
-import image05 from 'assets/thumbnails/image05.jpg';
-import image06 from 'assets/thumbnails/image06.jpg';
-import image07 from 'assets/thumbnails/image07.jpg';
-import image08 from 'assets/thumbnails/image08.jpg';
-import image09 from 'assets/thumbnails/image09.jpg';
-import image10 from 'assets/thumbnails/image10.jpg';
-import image11 from 'assets/thumbnails/image11.jpg';
-import image12 from 'assets/thumbnails/image12.jpg';
-import image13 from 'assets/thumbnails/image13.jpg';
-import image14 from 'assets/thumbnails/image14.jpg';
-import image15 from 'assets/thumbnails/image15.jpg';
-import image16 from 'assets/thumbnails/image16.jpg';
-import image17 from 'assets/thumbnails/image17.jpg';
-import image18 from 'assets/thumbnails/image18.jpg';
 import ElevationIcon from 'calcite-ui-icons-react/AltitudeIcon';
 import DistanceIcon from 'calcite-ui-icons-react/MeasureLineIcon';
-
-const percentSlope = (r, d) => (r > 0 && d > 0 ? (r / d) * 100 : 0.0);
-
-const images = [
-  image01,
-  image02,
-  image03,
-  image04,
-  image05,
-  image06,
-  image07,
-  image08,
-  image09,
-  image10,
-  image11,
-  image12,
-  image13,
-  image14,
-  image15,
-  image16,
-  image17,
-  image18,
-];
-
-const getTrailDifficulty = (slope) => {
-  if (slope <= 5) return Chip.difficulty.easy;
-  if (slope > 5 && slope <= 10) return Chip.difficulty.moderate;
-  if (slope > 10) return Chip.difficulty.difficult;
-  return Chip.difficulty.unknown;
-};
+import { Biking, Dog, Hiking, Horse, Road, Vehicle } from 'icons/icons';
 
 export default function TrailCard(props) {
   // TODO: This needs to be removed once we have real props flowing again
@@ -76,10 +30,7 @@ export default function TrailCard(props) {
   if (!props.FID) props = defaultProps;
   props.style = style;
 
-  const slope = percentSlope(
-    props.max_elevat - props.min_elevat,
-    props.length_mi_ * 1609.34
-  );
+  const slope = getSlope(props);
 
   const isHikingAllowed = () => {
     return props.hiking !== 'no';
@@ -101,11 +52,6 @@ export default function TrailCard(props) {
     return props.atv !== 'no';
   };
 
-  const getImage = () => {
-    const index = Math.floor(Math.random() * 18);
-    return images[index];
-  };
-
   return (
     <StyledCard
       wide
@@ -115,7 +61,7 @@ export default function TrailCard(props) {
         filterMapData([props.FID]);
       }}
     >
-      <CardImage wide src={getImage()} />
+      <CardImage wide src={getRandomImage()} />
       <StyledCardContent wide>
         <StyledCardTitle>{props.name}</StyledCardTitle>
         <IconsWrapper>
@@ -139,7 +85,7 @@ export default function TrailCard(props) {
           </IconWrapper>
         </IconsWrapper>
         <StatsWrapper>
-          <Chip difficulty={getTrailDifficulty(slope)} />
+          <TrailDifficulty slope={slope} />
           <DistanceWrapper>
             <DistanceIcon size={16} /> {props.length_mi_}mi
           </DistanceWrapper>
