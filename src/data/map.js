@@ -258,7 +258,7 @@ export async function initView(view) {
     title: 'Elevation',
   });
 
-  app.view.when(() => {
+  app.view.when(async () => {
     // set up bookmarks
     bookmarks.bookmarks.on('change', ({ added }) => {
       // Save bookmarks to local storage
@@ -401,12 +401,48 @@ export async function fetchTrails(elevation, { dogs, bike, horse }) {
 }
 
 /**
+ * Function to help find features in the current extent.
+ *
+ * Sample:
+ *
+ *  view.watch(
+ *    'stationary',
+ *       debounce((stationary) => {
+ *       if (!stationary) return;
+ *        fetchTrailsInExtent()
+ *        .then((results) => {
+ *          // do something with results
+ *        })
+ *        .catch((err) => console.log(err));
+ *    })
+ *  );
+ */
+export async function fetchTrailsInExtent() {
+  if (!app.view) return;
+  const [{ whenTrueOnce }] = await loadModules(['esri/core/watchUtils']);
+  if (!app.view.stationary) {
+    await whenTrueOnce(app.view, 'stationary');
+  }
+
+  await app.view.when();
+  await app.webmap.load();
+  const layer = app.webmap.findLayerById(TRAIL_ID);
+  const query = layer.createQuery();
+
+  query.geometry = app.view.extent.clone();
+  query.outFields = ['*'];
+  query.returnGeometry = false;
+
+  const { features } = await layer.queryFeatures(query);
+  return features;
+}
+
+/**
  * Filters map based on Feature Ids
  * @param {String[]} fids
  * @returns Promise<void>
  */
 export async function filterMapData(fids) {
-  console.log(fids);
 
   if (!app.webmap) return;
   const [{ whenFalseOnce }, geometryEngine] = await loadModules([
