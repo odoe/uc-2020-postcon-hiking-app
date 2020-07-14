@@ -3,8 +3,7 @@ import React, { useContext, useEffect } from 'react';
 
 // App components
 import { MapContext } from 'contexts/MapContext';
-import TrailCard from 'components/TrailCard';
-import TrailDetails from 'components/TrailDetails';
+import TrailCard, { TrailDetails } from 'components/TrailCard';
 
 // JSON & Styles
 import { StyledSidebar, StyledLoader } from './Sidebar-styled';
@@ -29,8 +28,8 @@ const Sidebar = () => {
   }, [selection]);
 
   const getContent = () => {
-    if (selection) {
-      return <TrailDetails trail={selection} />;
+    if (selection && selection.attributes) {
+      return <TrailDetails trail={selection.attributes} />;
     }
 
     return (

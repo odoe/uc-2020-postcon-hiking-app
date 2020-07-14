@@ -60,10 +60,16 @@ const ElevationWrapper = styled.div`
   }
 `;
 
+const StyledTrailDetails = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
 export {
   StyledCard,
   StyledCardTitle,
   StyledCardContent,
+  StyledTrailDetails,
   IconsWrapper,
   IconWrapper,
   StatsWrapper,
