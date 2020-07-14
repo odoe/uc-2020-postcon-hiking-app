@@ -138,7 +138,7 @@ export async function initWebMap(webmap) {
   hikingLayer.popupTemplate.content = async ({ graphic }) => {
     const trailId = graphic.attributes.FID;
     const query = hikingLayer.createQuery();
-    query.where = `TrailId = ${trailId}`;
+    query.where = `FID = ${trailId}`;
     const { features } = await hikingLayer
       .queryFeatures(query)
       .catch((err) => console.warn(err.message));
@@ -180,7 +180,7 @@ export async function initWebMap(webmap) {
 // https://jsapi.maps.arcgis.com/home/item.html?id=546747d854204d3ba068125f03910da9&sublayer=2&view=table&sortOrder=true&sortField=defaultFSOrder#data
 /**
  * Takes an object with filters to apply to layer
- * @param {*} filter 
+ * @param {*} filter
  */
 export function applyFilter(filter) {
   /**
@@ -207,7 +207,7 @@ export function applyFilter(filter) {
  * @param {HTMLElement} searchContainer
  * @returns Promise<void>
  */
-export async function initView(view, searchContainer) {
+export async function initView(view) {
   await initWebMap(view.map);
   const [
     Graphic,
@@ -401,6 +401,7 @@ export async function fetchTrails(elevation, { dogs, bike, horse }) {
  */
 export async function filterMapData(fids) {
   console.log(fids);
+
   if (!app.webmap) return;
   const [{ whenFalseOnce }, geometryEngine] = await loadModules([
     'esri/core/watchUtils',
@@ -410,7 +411,6 @@ export async function filterMapData(fids) {
   const where = `FID in (${fids.join(',')})`;
 
   await app.webmap.load();
-  // const layer = app.webmap.layers.getItemAt(1); // could be better
   const layer = app.webmap.findLayerById(TRAIL_ID);
   layer.outFields = ['*'];
   await layer.load();
@@ -476,4 +476,18 @@ export async function filterMapData(fids) {
     },
     excludedEffect: 'grayscale(25%) opacity(35%)',
   };
+}
+
+/**
+ * Returns a single feature (with all attributes), based on FID
+ * @param {String} fid
+ * @returns Promise<void>
+ */
+export async function getTrailFeature(fid) {
+  const layer = app.webmap.findLayerById(TRAIL_ID);
+  const query = layer.createQuery();
+  query.outFields = ['*'];
+  query.where = `FID = ${fid}`;
+  const { features } = await layer.queryFeatures(query);
+  return features[0];
 }

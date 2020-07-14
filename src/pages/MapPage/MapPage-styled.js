@@ -25,6 +25,8 @@ const SidebarWrapper = styled.aside`
   background: ${({ theme }) => theme.palette.background};
 `;
 
-const MapWrapper = styled.main``;
+const MapWrapper = styled.main`
+  position: relative;
+`;
 
 export { MapPageLayout, ContentWrapper, SidebarWrapper, MapWrapper };

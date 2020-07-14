@@ -1,11 +1,13 @@
 // Framework and third-party non-ui
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
 
 // App components
+import { MapContext } from 'contexts/MapContext';
+import TrailCard from 'components/TrailCard';
+import TrailDetails from 'components/TrailDetails';
 
 // JSON & Styles
-import { StyledSidebar } from './Sidebar-styled';
-import TrailCard from 'components/TrailCard';
+import { StyledSidebar, StyledLoader } from './Sidebar-styled';
 
 // Third-party components (buttons, icons, etc.)
 import { VariableSizeList as List } from 'react-window';
@@ -20,8 +22,18 @@ const getItemSize = (index) => 125; //rowHeights[index];
 const Row = ({ index, style }) => <TrailCard style={style} />;
 
 const Sidebar = () => {
-  return (
-    <StyledSidebar data-testid="Sidebar">
+  const { ready, selection } = useContext(MapContext);
+
+  useEffect(() => {
+    console.log(selection);
+  }, [selection]);
+
+  const getContent = () => {
+    if (selection) {
+      return <TrailDetails trail={selection} />;
+    }
+
+    return (
       <AutoSizer>
         {({ height, width }) => (
           <List
@@ -35,6 +47,16 @@ const Sidebar = () => {
           </List>
         )}
       </AutoSizer>
+    );
+  };
+
+  const getLoadingIndicator = () => {
+    return <StyledLoader sizeRatio={1.5} text="Loading..." />;
+  };
+
+  return (
+    <StyledSidebar data-testid="Sidebar">
+      {!ready ? getLoadingIndicator() : getContent()}
     </StyledSidebar>
   );
 };
