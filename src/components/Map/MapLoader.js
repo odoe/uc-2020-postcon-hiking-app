@@ -2,10 +2,18 @@
 import React from 'react';
 
 // JSON & Styles
-import { StyledMapLoader } from './Map-styled';
+import { StyledMapLoader, LoaderGlobeWrapper } from './Map-styled';
+import { LoaderGlobe } from 'icons/icons';
 
 const MapLoader = () => {
-  return <StyledMapLoader>Loading...</StyledMapLoader>;
+  return (
+    <>
+      <StyledMapLoader></StyledMapLoader>
+      <LoaderGlobeWrapper>
+        <LoaderGlobe />
+      </LoaderGlobeWrapper>
+    </>
+  );
 };
 
 export default MapLoader;

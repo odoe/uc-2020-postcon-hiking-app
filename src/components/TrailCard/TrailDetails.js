@@ -14,11 +14,16 @@ import {
   StatsWrapper,
   DistanceWrapper,
   ElevationWrapper,
+  ImageWrapper,
+  Title,
+  ButtonWrapper,
+  ContentWrapper,
+  SubTitleWrapper,
+  StyledLabel,
+  StyledCardImage,
 } from './TrailCard-styled';
 
 // Third-party components (buttons, icons, etc.)
-import { CardImage } from 'calcite-react/Card';
-import Label from 'calcite-react/Label';
 import Button from 'calcite-react/Button';
 import ElevationIcon from 'calcite-ui-icons-react/AltitudeIcon';
 import DistanceIcon from 'calcite-ui-icons-react/MeasureLineIcon';
@@ -62,51 +67,60 @@ const TrailDetails = ({ trail }) => {
 
   const getAccess = (access) => {
     if (access === ' ') {
-      return <Label green>Year-round</Label>;
+      return <StyledLabel white>Year-round</StyledLabel>;
     }
 
-    return <Label yellow>{access}</Label>;
+    return <StyledLabel yellow>{access}</StyledLabel>;
   };
 
   return (
     <StyledTrailDetails data-testid="TrailDetails">
-      <CardImage src={getRandomImage()} />
-      {name}
-      {getAccess(access)}
-      <Button>Directions</Button>
-      <Button>Hotels</Button>
+      <ImageWrapper>
+        <StyledCardImage src={getRandomImage()} />
+      </ImageWrapper>
+      <ContentWrapper>
 
-      <TrailDifficulty slope={slope} />
+        <SubTitleWrapper>
+          {getAccess(access)}
+          <ButtonWrapper>
+            <Button>Directions</Button>
+            <Button>Hotels</Button>
+          </ButtonWrapper>
+        </SubTitleWrapper>
 
-      <IconsWrapper>
-        <IconWrapper isActive={isHikingAllowed()}>
-          <Hiking key={`hiking-${FID}`} />
-        </IconWrapper>
-        <IconWrapper isActive={type === 'Road'}>
-          <Road key={`road-${FID}`} />
-        </IconWrapper>
-        <IconWrapper isActive={isBikingAllowed()}>
-          <Biking key={`biking-${FID}`} />
-        </IconWrapper>
-        <IconWrapper isActive={isHorseAllowed()}>
-          <Horse key={`horse-${FID}`} />
-        </IconWrapper>
-        <IconWrapper isActive={isDogAllowed()}>
-          <Dog key={`dog-${FID}`} />
-        </IconWrapper>
-        <IconWrapper isActive={isAtvAllowed()}>
-          <Vehicle key={`atv-${FID}`} />
-        </IconWrapper>
-      </IconsWrapper>
-      <StatsWrapper>
-        <TrailDifficulty slope={slope} />
-        <DistanceWrapper>
-          <DistanceIcon size={16} /> {length_mi_}mi
-        </DistanceWrapper>
-        <ElevationWrapper>
-          <ElevationIcon size={16} /> {slope.toFixed(1)}%
-        </ElevationWrapper>
-      </StatsWrapper>
+        <Title>{name}</Title>
+
+        <StatsWrapper>
+          <TrailDifficulty slope={slope} />
+          <DistanceWrapper>
+            <DistanceIcon size={16} /> {length_mi_}mi
+          </DistanceWrapper>
+          <ElevationWrapper>
+            <ElevationIcon size={16} /> {slope.toFixed(1)}%
+          </ElevationWrapper>
+        </StatsWrapper>
+
+        <IconsWrapper large>
+          <IconWrapper large isActive={isHikingAllowed()}>
+            <Hiking key={`hiking-${FID}`} />
+          </IconWrapper>
+          <IconWrapper large isActive={type === 'Road'}>
+            <Road key={`road-${FID}`} />
+          </IconWrapper>
+          <IconWrapper large isActive={isBikingAllowed()}>
+            <Biking key={`biking-${FID}`} />
+          </IconWrapper>
+          <IconWrapper large isActive={isHorseAllowed()}>
+            <Horse key={`horse-${FID}`} />
+          </IconWrapper>
+          <IconWrapper large isActive={isDogAllowed()}>
+            <Dog key={`dog-${FID}`} />
+          </IconWrapper>
+          <IconWrapper large isActive={isAtvAllowed()}>
+            <Vehicle key={`atv-${FID}`} />
+          </IconWrapper>
+        </IconsWrapper>
+      </ContentWrapper>
     </StyledTrailDetails>
   );
 };
