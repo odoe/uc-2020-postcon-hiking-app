@@ -78,6 +78,7 @@ export async function initWebMap(webmap) {
     GraphicsLayer,
     TileLayer,
     GroupLayer,
+    watchUtils
   ] = await loadModules([
     'esri/webmap/Bookmark',
     'esri/layers/ElevationLayer',
@@ -85,6 +86,7 @@ export async function initWebMap(webmap) {
     'esri/layers/GraphicsLayer',
     'esri/layers/TileLayer',
     'esri/layers/GroupLayer',
+    'esri/core/watchUtils'    
   ]);
 
   const notesLayer = new FeatureLayer({
@@ -104,7 +106,8 @@ export async function initWebMap(webmap) {
       'https://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer/',
   });
 
-  await elevationLayer.load();
+  elevationLayer.load();
+  await watchUtils.whenEqualOnce(elevationLayer, "loadStatus", "loaded");    
   await notesLayer.load();
 
   const trailLayer = new GraphicsLayer({ id: 'trail' });
@@ -126,14 +129,16 @@ export async function initWebMap(webmap) {
 
   app.elevationLayer = elevationLayer;
   app.notesLayer = notesLayer;
-
-  await webmap.load();
+  webmap.load();
+  await watchUtils.whenEqualOnce(webmap, "loadStatus", "loaded");    
 
   // hiking trails
   // const hikingLayer = app.webmap.layers.getItemAt(2); // could be better
   const hikingLayer = app.webmap.findLayerById(TRAIL_ID);
   hikingLayer.outFields = ['*'];
-  await hikingLayer.load();
+  // hikingLayer.visible = false;
+  hikingLayer.load();
+  await watchUtils.whenEqualOnce(hikingLayer, "loadStatus", "loaded");  
 
   hikingLayer.popupTemplate.content = async ({ graphic }) => {
     const trailId = graphic.attributes.FID;
@@ -198,6 +203,7 @@ export function applyFilter(filter) {
     return;
   }
   const hikingLayer = app.webmap.findLayerById(TRAIL_ID);
+  hikingLayer.visible = true;
   hikingLayer.definitionExpression = clause;
 }
 
