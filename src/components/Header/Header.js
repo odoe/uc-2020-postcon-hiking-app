@@ -1,5 +1,6 @@
 // Framework and third-party non-ui
 import React, { useContext } from 'react';
+import { Link } from 'react-router-dom';
 
 // App components
 import User from 'components/User';
@@ -27,7 +28,9 @@ const Header = () => {
         <TrailSearch />
       </SearchWrapper>
       <StyledCalciteH1>
-        <Breakpoint name="desktop">Discover Colorado</Breakpoint>
+        <Breakpoint name="desktop">
+          <Link to="/home">Discover Colorado</Link>
+        </Breakpoint>
       </StyledCalciteH1>
       <UserWrapper>
         <Breakpoint name="phone">

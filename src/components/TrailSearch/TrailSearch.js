@@ -85,14 +85,24 @@ const TrailSearch = ({ ...rest }) => {
     // Call the SearchViewModel's search method
     const result = await search({ vm, value });
 
-    // Get the FID from the search result
-    const fid = result.results[0].results[0].feature.attributes['FID'];
+    if (result.results[0].source.layer) {
+      // If the result was from the Trails layer...
 
-    // Get the full feature object from the layer
-    const feature = await getTrailFeature(fid);
+      // Get the FID from the search result
+      const fid = result.results[0].results[0].feature.attributes['FID'];
 
-    // Set the selected feature in MapContext
-    setSelection(feature);
+      // Get the full feature object from the layer
+      const feature = await getTrailFeature(fid);
+
+      // Set the selected feature in MapContext
+      setSelection(feature);
+    } else {
+      // If the result was from the locator...
+
+      // Get the extent and call the map view's goTo() method
+      const extent = result.results[0].results[0].extent;
+      mapView.goTo(extent);
+    }
 
     // Update the route
     history.push('/details');

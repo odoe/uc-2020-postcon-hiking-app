@@ -443,7 +443,6 @@ export async function fetchTrailsInExtent() {
  * @returns Promise<void>
  */
 export async function filterMapData(fids) {
-
   if (!app.webmap) return;
   const [{ whenFalseOnce }, geometryEngine] = await loadModules([
     'esri/core/watchUtils',

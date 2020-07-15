@@ -15,7 +15,7 @@ import { StyledMap } from './Map-styled';
 // Third-party components (buttons, icons, etc.)
 
 const Map = () => {
-  const { ready, mapView, setMapView, selection } = useContext(MapContext);
+  const { ready, setMapView, selection } = useContext(MapContext);
   const [ref, view] = useWebMap(webmapId);
 
   useEffect(() => {

@@ -1,5 +1,6 @@
 // Framework and third-party non-ui
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
+import { Switch, Route } from 'react-router-dom';
 
 // App components
 import { MapContext } from 'contexts/MapContext';
@@ -23,39 +24,37 @@ const Row = ({ index, style }) => <TrailCard style={style} />;
 const Sidebar = () => {
   const { ready, selection } = useContext(MapContext);
 
-  useEffect(() => {
-    console.log(selection);
-  }, [selection]);
-
-  const getContent = () => {
-    if (selection && selection.attributes) {
-      return <TrailDetails trail={selection.attributes} />;
-    }
-
-    return (
-      <AutoSizer>
-        {({ height, width }) => (
-          <List
-            width={width}
-            height={height}
-            itemCount={1000}
-            itemSize={getItemSize}
-            estimatedItemSize={125}
-          >
-            {Row}
-          </List>
-        )}
-      </AutoSizer>
-    );
-  };
-
   const getLoadingIndicator = () => {
     return <StyledLoader sizeRatio={1.5} text="Loading..." />;
   };
 
+  if (!ready) {
+    return getLoadingIndicator();
+  }
+
   return (
     <StyledSidebar data-testid="Sidebar">
-      {!ready ? getLoadingIndicator() : getContent()}
+      <Switch>
+        <Route exact path="/details/:id">
+          <TrailDetails trail={selection && selection.attributes} />
+        </Route>
+        <Route path="/details">
+          {' '}
+          <AutoSizer>
+            {({ height, width }) => (
+              <List
+                width={width}
+                height={height}
+                itemCount={1000}
+                itemSize={getItemSize}
+                estimatedItemSize={125}
+              >
+                {Row}
+              </List>
+            )}
+          </AutoSizer>
+        </Route>
+      </Switch>
     </StyledSidebar>
   );
 };

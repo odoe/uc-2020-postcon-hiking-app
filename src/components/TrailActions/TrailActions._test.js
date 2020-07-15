@@ -1,9 +1,9 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import Sidebar from './Sidebar';
+import TrailActions from './TrailActions';
 
 test('renders', () => {
-  const { getByText } = render(<Sidebar />);
+  const { getByText } = render(<TrailActions />);
   const linkElement = getByText(/learn react/i);
   expect(linkElement).toBeInTheDocument();
 });

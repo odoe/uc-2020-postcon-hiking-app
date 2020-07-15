@@ -21,6 +21,11 @@ const StyledCalciteH1 = styled(CalciteH1)`
   line-height: inherit;
   text-align: center;
   margin: 0;
+
+  a {
+    color: ${({ theme }) => theme.palette.white};
+    text-decoration: none;
+  }
 `;
 
 const SearchWrapper = styled.div`

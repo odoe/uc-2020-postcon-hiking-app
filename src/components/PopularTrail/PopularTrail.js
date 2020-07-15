@@ -1,5 +1,6 @@
 // Framework and third-party non-ui
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 // App components
 
@@ -21,7 +22,9 @@ const PopularTrail = ({ id }) => {
         <CardContent>
           <CardTitle>{trail.name}</CardTitle>
           <p>{trail.description}</p>
-          <Button>Check it out!</Button>
+          <Link style={{ width: '100%' }} to={`/details/${trail.id}`}>
+            <Button fullWidth>Check it out!</Button>
+          </Link>
         </CardContent>
       </Card>
     </StyledPopularTrail>
