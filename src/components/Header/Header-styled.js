@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { CalciteH1 } from 'calcite-react/Elements';
+import { CalciteH1, CalciteA } from 'calcite-react/Elements';
 
 const StyledHeader = styled.header`
   display: grid;
@@ -21,6 +21,11 @@ const StyledCalciteH1 = styled(CalciteH1)`
   line-height: inherit;
   text-align: center;
   margin: 0;
+
+  a {
+    color: ${({ theme }) => theme.palette.white};
+    text-decoration: none;
+  }
 `;
 
 const SearchWrapper = styled.div`
