@@ -12,17 +12,15 @@ const MapContextProvider = (props) => {
   const [mapView, setMapView] = useState(null);
   const [selection, setSelection] = useState(null);
   const [ready, setReady] = useState(false);
+  const routeFid = match && match.params.fid;
 
   useEffect(() => {
     const init = async function () {
       if (mapView) {
         await initView(mapView);
 
-        if (match.params.fid) {
-          console.log('querying for:', match.params.fid);
-
-          const feature = await getTrailFeature(match.params.fid);
-          console.log(feature);
+        if (routeFid) {
+          const feature = await getTrailFeature(routeFid);
           setSelection(feature);
         }
 
@@ -31,6 +29,17 @@ const MapContextProvider = (props) => {
     };
     init();
   }, [mapView]);
+
+  useEffect(() => {
+    if (mapView && routeFid) {
+      const updateSelection = async function () {
+        console.log(routeFid);
+        const feature = await getTrailFeature(routeFid);
+        setSelection(feature);
+      };
+      updateSelection();
+    }
+  }, [routeFid]);
 
   useEffect(() => {
     if (selection && selection.attributes) {
