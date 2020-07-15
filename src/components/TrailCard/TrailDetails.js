@@ -30,6 +30,11 @@ import DistanceIcon from 'calcite-ui-icons-react/MeasureLineIcon';
 import { Biking, Dog, Hiking, Horse, Road, Vehicle } from 'icons/icons';
 
 const TrailDetails = ({ trail }) => {
+  if (!trail) {
+    // TODO: needs a bit of polish :)
+    return 'unknown trail!';
+  }
+
   const {
     FID,
     access,
@@ -79,7 +84,6 @@ const TrailDetails = ({ trail }) => {
         <StyledCardImage src={getRandomImage()} />
       </ImageWrapper>
       <ContentWrapper>
-
         <SubTitleWrapper>
           {getAccess(access)}
           <ButtonWrapper>
