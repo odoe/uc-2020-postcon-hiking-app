@@ -1,9 +1,9 @@
 import React from 'react';
-import Sidebar from '.';
+import TrailActions from '.';
 
 export default {
-  title: 'Sidebar',
-  component: Sidebar,
+  title: 'TrailActions',
+  component: TrailActions,
 };
 
-export const Default = () => <Sidebar>Sidebar</Sidebar>;
+export const Default = () => <TrailActions>TrailActions</TrailActions>;

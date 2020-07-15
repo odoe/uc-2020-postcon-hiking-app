@@ -4,7 +4,6 @@ import { useParams } from 'react-router-dom';
 
 // App components
 import Header from 'components/Header';
-import Filter from 'components/Filter';
 import Sidebar from 'components/Sidebar';
 import Map from 'components/Map';
 
@@ -15,6 +14,7 @@ import {
   SidebarWrapper,
   MapWrapper,
 } from './MapPage-styled';
+import SubHeader from 'components/SubHeader';
 
 // Third-party components (buttons, icons, etc.)
 
@@ -24,7 +24,7 @@ const MapPage = () => {
   return (
     <MapPageLayout data-testid="MapPage">
       <Header />
-      <Filter />
+      <SubHeader />
       <ContentWrapper>
         <SidebarWrapper>
           <Sidebar />
