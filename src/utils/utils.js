@@ -31,5 +31,8 @@ export function calculateAltitudeGainLoss(paths) {
 
 // Accepts a Trail feature and returns a slope value
 export function getSlope({ max_elevat, min_elevat, length_mi_ }) {
-  return percentSlope(max_elevat - min_elevat, length_mi_ * 1609.34);
+  const maxElevation = max_elevat || 0;
+  const minElevation = min_elevat || 0;
+  const length = length_mi_ || 0;
+  return percentSlope(maxElevation - minElevation, length * 1609.34);
 }

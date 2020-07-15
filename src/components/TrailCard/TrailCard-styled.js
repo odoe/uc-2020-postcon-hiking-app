@@ -32,8 +32,8 @@ const IconsWrapper = styled.div`
 `;
 
 const IconWrapper = styled.div`
-  width: 1.2rem;
-  height: 1.2rem;
+  width: 32px;
+  height: 32px;
   border-radius: 5px;
   padding: 5px;
   margin-inline-end: 0.3rem;
@@ -84,6 +84,7 @@ const StyledTrailDetails = styled.div`
 
 const ImageWrapper = styled.div`
   display: flex;
+  overflow: hidden;
 `;
 
 const Title = styled(CalciteH2)`
