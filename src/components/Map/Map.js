@@ -36,7 +36,7 @@ const Map = () => {
     if (!stationary) return;
 
     // Since map is now stationary, fetch trails
-    const trails = await fetchTrailsInExtent();
+    const trails = await fetchTrailsInExtent(view);
 
     // If trails is undefined, abort
     if (!trails) {
