@@ -1,11 +1,14 @@
 import React, { createContext, useEffect, useState } from 'react';
+import { useHistory, useRouteMatch } from 'react-router-dom';
 
-import { initView } from 'data/map';
+import { initView, getTrailFeature } from 'data/map';
 import dummyFeature from './dummyFeature.json';
 
 export const MapContext = createContext();
 
 const MapContextProvider = (props) => {
+  const match = useRouteMatch('/details/:fid');
+  const history = useHistory();
   const [mapView, setMapView] = useState(null);
   const [selection, setSelection] = useState(null);
   const [ready, setReady] = useState(false);
@@ -14,12 +17,26 @@ const MapContextProvider = (props) => {
     const init = async function () {
       if (mapView) {
         await initView(mapView);
-        setSelection(dummyFeature);
+
+        if (match.params.fid) {
+          console.log('querying for:', match.params.fid);
+
+          const feature = await getTrailFeature(match.params.fid);
+          console.log(feature);
+          setSelection(feature);
+        }
+
         setReady(true);
       }
     };
     init();
   }, [mapView]);
+
+  useEffect(() => {
+    if (selection && selection.attributes) {
+      history.push(`/details/${selection.attributes.FID}`);
+    }
+  }, [selection, history]);
 
   return (
     <MapContext.Provider
