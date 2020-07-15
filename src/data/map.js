@@ -433,6 +433,12 @@ export async function fetchTrailsInExtent() {
   query.outFields = ['*'];
   query.returnGeometry = false;
 
+  // Limit results to 100 at a time
+  query.num = 100;
+
+  // Order results by name
+  query.orderByFields = ['name'];
+
   const { features } = await layer.queryFeatures(query);
   return features;
 }

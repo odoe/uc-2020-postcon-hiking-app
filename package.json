@@ -21,6 +21,7 @@
     "calcite-ui-icons-react": "^0.19.0",
     "esri-loader": "^2.14.0",
     "esri-loader-hooks": "^0.2.0",
+    "lodash.debounce": "^4.0.8",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-responsive": "^8.1.0",
