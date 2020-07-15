@@ -13,10 +13,14 @@ const StyledCard = styled(Card)`
 const StyledCardTitle = styled(CardTitle)`
   font-size: 1.2rem;
   margin: 0 0 0.35rem 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 const StyledCardContent = styled(CardContent)`
   padding: 0.55rem 1rem;
+  overflow: hidden;
 `;
 
 const IconsWrapper = styled.div`
@@ -32,8 +36,8 @@ const IconsWrapper = styled.div`
 `;
 
 const IconWrapper = styled.div`
-  width: 32px;
-  height: 32px;
+  width: 24px;
+  height: 24px;
   border-radius: 5px;
   padding: 5px;
   margin-inline-end: 0.3rem;
@@ -48,8 +52,8 @@ const IconWrapper = styled.div`
   ${(props) =>
     props.large &&
     css`
-      width: 2rem;
-      height: 2rem;
+    width: 32px;
+    height: 32px;
     `};
 
   svg {

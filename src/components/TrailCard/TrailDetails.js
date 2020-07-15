@@ -103,15 +103,15 @@ const TrailDetails = ({ ready, trail }) => {
       <ContentWrapper>
         <SubTitleWrapper>
           {getAccess(ready, access)}
-          { ready ? (
-          <ButtonWrapper>
-            <Button>Directions</Button>
-            <Button>Hotels</Button>
-          </ButtonWrapper>
+          {ready ? (
+            <ButtonWrapper>
+              <Button>Directions</Button>
+              <Button>Hotels</Button>
+            </ButtonWrapper>
           ) : null}
         </SubTitleWrapper>
 
-        <Title>{ready ? name : <Skeleton width="200" />}</Title>
+        <Title>{ready ? name : <Skeleton width={200} />}</Title>
 
         <StatsWrapper>
           {ready ? (

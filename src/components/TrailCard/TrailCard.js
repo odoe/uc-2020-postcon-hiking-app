@@ -1,5 +1,5 @@
 // Framework and third-party non-ui
-import React from 'react';
+import React, { useState } from 'react';
 
 // App components
 import TrailDifficulty from './common/TrailDifficulty';
@@ -25,6 +25,7 @@ import DistanceIcon from 'calcite-ui-icons-react/MeasureLineIcon';
 import { Biking, Dog, Hiking, Horse, Road, Vehicle } from 'icons/icons';
 
 export default function TrailCard({ style, attributes, setSelection }) {
+  const [image, setImage] = useState(getRandomImage());
   const slope = getSlope(attributes);
 
   const isHikingAllowed = () => {
@@ -59,7 +60,7 @@ export default function TrailCard({ style, attributes, setSelection }) {
 
   return (
     <StyledCard wide style={style} onClick={handleOnClick}>
-      <CardImage wide src={getRandomImage()} />
+      <CardImage wide src={image} />
       <StyledCardContent wide>
         <StyledCardTitle>{attributes.name}</StyledCardTitle>
         <IconsWrapper>
