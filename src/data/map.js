@@ -481,6 +481,7 @@ export async function filterMapData(fids) {
   `;
 
   const renderer = applyTrailRenderer(arcade);
+  app.defaultRenderer = layer.renderer.clone();
   layer.renderer = renderer;
 
   const groupLayer = app.webmap.findLayerById('group');
@@ -532,4 +533,14 @@ export async function getTrailFeature(fid) {
   query.where = `FID = ${fid}`;
   const { features } = await layer.queryFeatures(query);
   return features[0];
+}
+
+/**
+ * This function will reset the renderer of the trail layer
+ * @param {`esri/views/MapView`} view 
+ */
+export async function resetRenderer(view) {
+  await view.map.load();
+  const layer = view.map.findLayerById(TRAIL_ID);
+  layer.renderer = app.defaultRenderer.clone();
 }
