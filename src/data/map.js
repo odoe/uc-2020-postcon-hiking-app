@@ -417,19 +417,20 @@ export async function fetchTrails(elevation, { dogs, bike, horse }) {
  *    })
  *  );
  */
-export async function fetchTrailsInExtent() {
-  if (!app.view) return;
+export async function fetchTrailsInExtent(view) {
+  view = view || app.view;
+  if (!view && !app.view) return;
   const [{ whenTrueOnce }] = await loadModules(['esri/core/watchUtils']);
-  if (!app.view.stationary) {
-    await whenTrueOnce(app.view, 'stationary');
+  if (!view.stationary) {
+    await whenTrueOnce(view, 'stationary');
   }
 
-  await app.view.when();
-  await app.webmap.load();
-  const layer = app.webmap.findLayerById(TRAIL_ID);
+  await view.when();
+  await view.map.load();
+  const layer = view.map.findLayerById(TRAIL_ID);
   const query = layer.createQuery();
 
-  query.geometry = app.view.extent.clone();
+  query.geometry = view.extent.clone();
   query.outFields = ['*'];
   query.returnGeometry = false;
 
