@@ -33,7 +33,6 @@ const MapContextProvider = (props) => {
   useEffect(() => {
     if (mapView && routeFid) {
       const updateSelection = async function () {
-        console.log(routeFid);
         const feature = await getTrailFeature(routeFid);
         setSelection(feature);
       };

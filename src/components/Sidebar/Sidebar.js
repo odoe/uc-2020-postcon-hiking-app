@@ -24,10 +24,6 @@ const Row = ({ index, style }) => <TrailCard style={style} />;
 const Sidebar = () => {
   const { ready, selection } = useContext(MapContext);
 
-  useEffect(() => {
-    console.log(selection);
-  }, [selection]);
-
   const getLoadingIndicator = () => {
     return <StyledLoader sizeRatio={1.5} text="Loading..." />;
   };
