@@ -13,8 +13,11 @@ const MapContextProvider = (props) => {
   const [mapView, setMapView] = useState(null);
   const [selection, setSelection] = useState(null);
   const [ready, setReady] = useState(false);
+  const [featureList, setFeatureList] = useState([]);
+
   const routeFid = match && match.params.fid;
 
+  // call initView when the mapView is ready, and set the selection if its in the route
   useEffect(() => {
     const init = async function () {
       if (mapView) {
@@ -31,16 +34,22 @@ const MapContextProvider = (props) => {
     init();
   }, [mapView]);
 
+  // Update the selected trail when the fid in the route changes
   useEffect(() => {
-    if (mapView && routeFid) {
-      const updateSelection = async function () {
-        const feature = await getTrailFeature(routeFid);
-        setSelection(feature);
-      };
-      updateSelection();
+    if (mapView) {
+      if (routeFid) {
+        const updateSelection = async function () {
+          const feature = await getTrailFeature(routeFid);
+          setSelection(feature);
+        };
+        updateSelection();
+      } else {
+        setSelection(null);
+      }
     }
   }, [routeFid]);
 
+  // Update the route fid when the selection changes
   useEffect(() => {
     if (selection && selection.attributes) {
       history.push(`/details/${selection.attributes.FID}`);
@@ -54,6 +63,8 @@ const MapContextProvider = (props) => {
         setMapView,
         selection,
         setSelection,
+        featureList,
+        setFeatureList,
         ready,
       }}
     >

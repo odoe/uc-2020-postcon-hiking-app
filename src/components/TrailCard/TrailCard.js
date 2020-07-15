@@ -24,70 +24,68 @@ import ElevationIcon from 'calcite-ui-icons-react/AltitudeIcon';
 import DistanceIcon from 'calcite-ui-icons-react/MeasureLineIcon';
 import { Biking, Dog, Hiking, Horse, Road, Vehicle } from 'icons/icons';
 
-export default function TrailCard(props) {
-  // TODO: This needs to be removed once we have real props flowing again
-  const style = props.style;
-  if (!props.FID) props = defaultProps;
-  props.style = style;
-
-  const slope = getSlope(props);
+export default function TrailCard({ style, attributes, setSelection }) {
+  const slope = getSlope(attributes);
 
   const isHikingAllowed = () => {
-    return props.hiking !== 'no';
+    return attributes.hiking !== 'no';
   };
 
   const isBikingAllowed = () => {
-    return props.bike !== 'no';
+    return attributes.bike !== 'no';
   };
 
   const isHorseAllowed = () => {
-    return props.horse !== 'no';
+    return attributes.horse !== 'no';
   };
 
   const isDogAllowed = () => {
-    return props.dogs !== 'no';
+    return attributes.dogs !== 'no';
   };
 
   const isAtvAllowed = () => {
-    return props.atv !== 'no';
+    return attributes.atv !== 'no';
+  };
+
+  const handleOnClick = async () => {
+    const { getTrailFeature } = await import('data/map');
+
+    // Get the full feature object from the layer
+    const feature = await getTrailFeature(attributes.FID);
+
+    // Set the selected feature in MapContext
+    setSelection(feature);
   };
 
   return (
-    <StyledCard
-      wide
-      style={props.style}
-      onClick={async () => {
-        const { filterMapData } = await import('data/map');
-        filterMapData([props.FID]);
-      }}
-    >
+    <StyledCard wide style={style} onClick={handleOnClick}>
       <CardImage wide src={getRandomImage()} />
       <StyledCardContent wide>
-        <StyledCardTitle>{props.name}</StyledCardTitle>
+        <StyledCardTitle>{attributes.name}</StyledCardTitle>
         <IconsWrapper>
           <IconWrapper isActive={isHikingAllowed()}>
-            <Hiking key={`hiking-${props.FID}`} />
+            <Hiking key={`hiking-${attributes.FID}`} />
           </IconWrapper>
-          <IconWrapper isActive={props.type === 'Road'}>
-            <Road key={`road-${props.FID}`} />
+          <IconWrapper isActive={attributes.type === 'Road'}>
+            <Road key={`road-${attributes.FID}`} />
           </IconWrapper>
           <IconWrapper isActive={isBikingAllowed()}>
-            <Biking key={`biking-${props.FID}`} />
+            <Biking key={`biking-${attributes.FID}`} />
           </IconWrapper>
           <IconWrapper isActive={isHorseAllowed()}>
-            <Horse key={`horse-${props.FID}`} />
+            <Horse key={`horse-${attributes.FID}`} />
           </IconWrapper>
           <IconWrapper isActive={isDogAllowed()}>
-            <Dog key={`dog-${props.FID}`} />
+            <Dog key={`dog-${attributes.FID}`} />
           </IconWrapper>
           <IconWrapper isActive={isAtvAllowed()}>
-            <Vehicle key={`atv-${props.FID}`} />
+            <Vehicle key={`atv-${attributes.FID}`} />
           </IconWrapper>
         </IconsWrapper>
         <StatsWrapper>
           <TrailDifficulty slope={slope} />
           <DistanceWrapper>
-            <DistanceIcon size={16} /> {props.length_mi_}mi
+            <DistanceIcon size={16} /> {attributes.length_mi_}mi
           </DistanceWrapper>
           <ElevationWrapper>
             <ElevationIcon size={16} /> {slope.toFixed(1)}%
@@ -97,37 +95,3 @@ export default function TrailCard(props) {
     </StyledCard>
   );
 }
-
-const defaultProps = {
-  FID: 2744,
-  ogc_fid: 1939,
-  feature_id: '74040',
-  place_id: 5798,
-  name: 'Garnet Mesa Trail',
-  place_id_1: 0,
-  name_1: ' ',
-  place_id_2: 0,
-  name_2: ' ',
-  place_id_3: 0,
-  name_3: ' ',
-  trail_num: ' ',
-  surface: ' ',
-  oneway: ' ',
-  type: 'Trail',
-  hiking: ' ',
-  horse: ' ',
-  bike: ' ',
-  motorcycle: ' ',
-  atv: ' ',
-  ohv_gt_50: ' ',
-  highway_ve: ' ',
-  dogs: ' ',
-  access: ' ',
-  min_elevat: 1519.77038574,
-  max_elevat: 1543.66088867,
-  length_mi_: 0.1,
-  manager: 'City of Delta',
-  INPUT_DATE: 1569369600000,
-  EDIT_DATE: 1569369600000,
-  Shape__Length: 191.359418917475,
-};
