@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { CalciteH1, CalciteA } from 'calcite-react/Elements';
+import { CalciteH1 } from 'calcite-react/Elements';
 
 const StyledHeader = styled.header`
   display: grid;

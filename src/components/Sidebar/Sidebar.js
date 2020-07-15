@@ -1,5 +1,5 @@
 // Framework and third-party non-ui
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { Switch, Route } from 'react-router-dom';
 
 // App components

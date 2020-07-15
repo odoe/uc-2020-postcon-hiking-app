@@ -1,8 +1,9 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+
 import React, { createContext, useEffect, useState } from 'react';
 import { useHistory, useRouteMatch } from 'react-router-dom';
 
 import { initView, getTrailFeature } from 'data/map';
-import dummyFeature from './dummyFeature.json';
 
 export const MapContext = createContext();
 
